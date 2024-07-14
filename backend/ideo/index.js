@@ -20,6 +20,7 @@ const routes = require("./routes");
 app.use("/api/users", routes.userRoutes);
 app.use("/api/resources", routes.resourceRoutes);
 app.use("/api/libraries", routes.libraryRoutes);
+app.use("/api/containers", routes.containerRoutes);
 
 
 // typically, as .env would not be provided with source code, we provide a default PORT string
