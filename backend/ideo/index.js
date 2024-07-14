@@ -13,7 +13,11 @@ app.use(express.json());
 app.get("/", (req, res) => {
     console.log("At server root.");
     res.send({result: 200, data: "at root of server"});
-})
+});
+
+// api routes
+const routes = require("./routes");
+app.use("/api/users", routes.userRoutes);
 
 // typically, as .env would not be provided with source code, we provide a default PORT string
 const PORT = process.env.PORT || 8080;
