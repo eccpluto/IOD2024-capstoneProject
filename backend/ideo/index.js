@@ -7,6 +7,7 @@ require("dotenv").config();
 // connect to database (optionally depends on .env and hence dotenv.config() preceding this)
 require("./dbConnect");
 
+// important middleware for parsing json
 app.use(express.json());
 
 // TODO pull in routes
