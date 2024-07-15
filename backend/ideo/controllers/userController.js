@@ -28,16 +28,16 @@ const updateUserById = (req, res) => {
     console.log(`Updating user id: ${req.params.id}.`);
     // passing { new: true } will return the updated record
     userModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(data => res.send({result: 200, data: data}))
-        .catch(err => res.send({result: 500, error: err.message}));
+        .then(data => res.send({ result: 200, data: data }))
+        .catch(err => res.send({ result: 500, error: err.message }));
 };
 
 const deleteUserById = (req, res) => {
     console.log(`Deleting user id: ${req.params.id}.`);
     // passing { new: true } will return the updated record
     userModel.findByIdAndDelete(req.params.id, req.body, { new: true })
-        .then(data => res.send({result: 200, data: data}))
-        .catch(err => res.send({result: 500, error: err.message}));
+        .then(data => res.send({ result: 200, data: data }))
+        .catch(err => res.send({ result: 500, error: err.message }));
 }
 
 module.exports = {

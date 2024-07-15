@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-
+import useData from "../hooks/useData";
 // instantiate a context object
 const UserContext = createContext();
 
@@ -10,6 +10,8 @@ export const UserProvider = (props) => {
     const [user, setUser] = useState({ email: '' });
     // pass errors like user not found etc, to context consumer
     const [errorLog, setErrorLog] = useState({ message: '' });
+    // access user collection
+    const localUsers = useData("http://localhost:8080/api/users");
 
     // check credentials against user database
     function authenticateUser({ email, password }) {
@@ -17,6 +19,7 @@ export const UserProvider = (props) => {
         // everything else is false, should throw error here and pass upto
         // handleAuthenticateUser try catch block
         // throw "Houston, we hjave a prokblems";
+        
         return true;
     }
 
