@@ -14,7 +14,7 @@ const getUsers = (req, res) => {
     console.log(`Getting all users, with params: ${JSON.stringify(req.query)}`);
     if (req.query.email) {
         // client wants a particular user with the corresponding email
-        userModel.findOne({ email: req.query.email })
+        userModel.findOne({ email: req.query.email, password: req.query.password })
             .then(data => res.send({ result: 200, data: data }))
             .catch(err => res.send({ result: 500, error: err.message }));
     } else

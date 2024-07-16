@@ -14,50 +14,53 @@ export default function useMongoDb(url) {
     function reducer(state, action) {
         switch (action.method) {
             case "post":
-                return state = { url: url, method: "post" };
+                return state = { url: action.url, method: "post" };
 
             case "get":
-                return state = { url: url, method: "get" };
+                return state = { url: action.url, method: "get" };
 
             case "put":
-                return state = { url: url, method: "put" };
+                return state = { url: action.url, method: "put" };
 
             case "delete":
-                return state = { url: url, method: "delete" };
+                return state = { url: action.url, method: "delete" };
         }
     }
 
     // this dispatches a call to update the enpoint and http method
     function setEndpointConfig(method, url) {
+        console.log('updading config');
         dispatch({ url: url, method: method });
     }
 
     // this makes database queries based on the endpoint configuration
     // it observes the endpointConfig, which defines both the endpoint and http method.
     useEffect(() => {
-        if (url) {
+        if (endpointConfig.url) {
+            console.log(JSON.stringify(endpointConfig));
             switch (endpointConfig.method) {
                 case "post":
-                    axios.post(url)
-                        .then(response => setDbResult(response))
+                    axios.post(endpointConfig.url)
+                        .then(response => setDbResult(response.data))
                         .catch(err => console.log(err));
                     break;
 
                 case "get":
-                    axios.get(url)
-                        .then(response => setDbResult(response))
+                    console.log(endpointConfig.url);
+                    axios.get(endpointConfig.url)
+                        .then(response => setDbResult(response.data))
                         .catch(err => console.log(err));
                     break;
 
                 case "put":
-                    axios.put(url)
-                        .then(response => setDbResult(response))
+                    axios.put(endpointConfig.url)
+                        .then(response => setDbResult(response.data))
                         .catch(err => console.log(err));
                     break;
 
                 case "delete":
-                    axios.delete(url)
-                        .then(response => setDbResult(response))
+                    axios.delete(endpointConfig.url)
+                        .then(response => setDbResult(response.data))
                         .catch(err => console.log(err));
                     break;
 

@@ -7,7 +7,8 @@ import { useUserContext } from "../contexts/UserContext";
 export default function LoginForm(props) {
 
     // userContext handles contextual things about the user, like current user and authentication
-    const { user, isAuthenticated, handleAuthenticateUser } = useUserContext();
+    const { user, handleAuthenticateUser } = useUserContext();
+    const [isAuthorised, setIsAuthorised] = useState(false);
 
     // internal states of component
     const [userCredentials, setUserCredentials] = useState({
@@ -54,7 +55,10 @@ export default function LoginForm(props) {
     }
 
     // anotherCallback to set the authentication fla
-    // const getAuthenticationStatus = () => { }
+    const getAuthorisationStatus = (isAuthorised) => {
+        console.log(`authorisation callback reuslt: ${isAuthorised}`);
+        setIsAuthorised(isAuthorised);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -66,19 +70,20 @@ export default function LoginForm(props) {
                 email: userCredentials.email,
                 password: userCredentials.password,
                 // anonymous function to update the submitResult from the context
-            }, getFeedback);
+            }, getAuthorisationStatus, getFeedback);
         }
         // console.log(user);
     }
 
     const handleLogout = () => {
-        handleAuthenticateUser({}, getAuthenticationStatus);
+        handleAuthenticateUser({}, getAuthorisationStatus);
+        setIsAuthorised(false);
         setUserCredentials({ email: '', password: '' });
     }
 
     // on successful login, this is returned.
     // the context should rely on the server to keep a record of who is logged in
-    if (isAuthenticated) {
+    if (isAuthorised) {
         return (
             <Box>
                 <p>Welcome {user.email}!</p>
