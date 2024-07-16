@@ -11,15 +11,28 @@ const createUser = (req, res) => {
 };
 
 const getUsers = (req, res) => {
-    console.log("Getting all users.");
-    userModel.find({})
-        .then(data => res.send({ result: 200, data: data }))
-        .catch(err => res.send({ result: 500, error: err.message }));
+    console.log(`Getting all users, with params: ${JSON.stringify(req.query)}`);
+    if (req.query.email) {
+        // client wants a particular user with the corresponding email
+        userModel.findOne({ email: req.query.email })
+            .then(data => res.send({ result: 200, data: data }))
+            .catch(err => res.send({ result: 500, error: err.message }));
+    } else
+        userModel.find({})
+            .then(data => res.send({ result: 200, data: data }))
+            .catch(err => res.send({ result: 500, error: err.message }));
 };
 
 const getUserById = (req, res) => {
     console.log(`Getting user id: ${req.params.id}.`);
     userModel.findById(req.params.id)
+        .then(data => res.send({ result: 200, data: data }))
+        .catch(err => res.send({ result: 500, error: err.message }));
+};
+
+const getUserByEmail = (req, res) => {
+    console.log(`Getting user email: ${req.params.email}.`);
+    userModel.findOne({ email: req.params.email })
         .then(data => res.send({ result: 200, data: data }))
         .catch(err => res.send({ result: 500, error: err.message }));
 };
@@ -44,6 +57,7 @@ module.exports = {
     createUser,
     getUsers,
     getUserById,
+    getUserByEmail,
     updateUserById,
     deleteUserById,
 }

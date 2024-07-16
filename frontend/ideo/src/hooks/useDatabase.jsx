@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
-// generic hook that offloads calls to a server HTTP API via useEffect
+// generic hook that offloads calls to a server HTTP API via useEffect, with optoinal parameters
 // note this only performs get requests
-export default function useData(url) {
+export default function useDatabase(url) {
 
-    console.log(url);
+    console.log(`url passed into useDatabase hook: ${url}`);
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -15,7 +14,8 @@ export default function useData(url) {
     useEffect(() => {
         const getData = async () => {
             if (url) {
-               await axios.get(url)
+                // await
+                axios.get(url)
                     .then(response => {
                         console.log(`url: ${url}`);
                         console.log(response.data);
@@ -29,5 +29,7 @@ export default function useData(url) {
             setLoading(false);
         };
         getData();
-    }, [])
+    }, []);
+
+    return [data];
 }
