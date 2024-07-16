@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import useMongoDb from "../hooks/useMongoDb";
 
 // instantiate a context object
 const UserContext = createContext();
@@ -6,47 +7,45 @@ const UserContext = createContext();
 // describe how context is used by providing an interface
 export const UserProvider = (props) => {
 
-    // track currently authenticated user (default to no user logged in)
-    const [user, setUser] = useState({ email: '' });
-    // pass errors like user not found etc, to context consumer
-    const [errorLog, setErrorLog] = useState({ message: '' });
+    const [user, setUser] = useState({ email: '', password: '' });                          // track authenticating user
+    // const [isAuthenticated, setIsAuthenticated] = useState(false);                       // authentication flag
+    const [dbResult, setEndpointConfig] = useMongoDb("http://localhost:8080/api/users");    // hook into user collection
+    const isAuthorisedCallback = useRef(() => {return;});                                   // store a callback to report on authorisation, function stub here to avoid error
 
-    // check credentials against user database
-    function authenticateUser({ email, password }) {
-        // if user exists and password correct, return true
-        // everything else is false, should throw error here and pass upto
-        // handleAuthenticateUser try catch block
-        // throw "Houston, we hjave a prokblems";
-        return true;
-    }
+    // once the database returns a result, check try authenticate the user against it
+    useEffect(() => {
+        // if we have a result conforming to the users email, we have authentication
+        if (dbResult.data && dbResult.data.email == user.email) {
+            isAuthorisedCallback.current(true);
 
-    // try authenticate the user when logging in
-    const handleAuthenticateUser = ({ email, password }, callback = null) => {
-        //clear errorLog
-        setErrorLog({ message: '' });
+        } else {
+            isAuthorisedCallback.current(false);
+        };
+    }, [dbResult]);
+
+    // begin the authentication process
+    const handleAuthenticateUser = ({ email, password }, authorisationCallback, messageCallback = null) => {
         // logout condition
         if (!email && !password) {
-            setUser({ email: '' });
-            if(callback){
-                callback('Logged out');
+            setUser({ email: '', password: '' });
+            if (messageCallback) {
+                messageCallback('Logged out');
             }
             return;
         }
         try {
-            console.log(`authenticating user:\n ${user}`)
-            if (authenticateUser({ email, password })) {
-                setUser({
-                    // email uniquely identifies user
-                    email: email
-                })
-                if(callback) {
-                    callback('Successfully logged in.')
-                }
-            };
+            console.log(`querying database for user:\n ${email}`);
+            messageCallback('Logging in..')
+            // ref to callback to be called on re-render after dbResult returns
+            isAuthorisedCallback.current = authorisationCallback;
+            // setup database query, on re-render tryAuthenticateUser will run
+            setEndpointConfig('get', `http://localhost:8080/api/users?email=${email}&password=${password}`);
+            // store user email
+            setUser({ email: email });
         } catch (e) {
-            console.error(`Unable to authenticate user: ${e}`);
-            if(callback) {
-                callback(`${e}`);
+            console.error(`Issue authenticating user: ${e}`);
+            if (messageCallback) {
+                messageCallback(`${e}`);
             }
         }
     }

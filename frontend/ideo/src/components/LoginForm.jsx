@@ -1,13 +1,14 @@
 import { Avatar, Box, Button, Container, TextField, Typography } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 
 
 export default function LoginForm(props) {
 
-    // consume userContext
+    // userContext handles contextual things about the user, like current user and authentication
     const { user, handleAuthenticateUser } = useUserContext();
+    const [isAuthorised, setIsAuthorised] = useState(false);
 
     // internal states of component
     const [userCredentials, setUserCredentials] = useState({
@@ -47,35 +48,42 @@ export default function LoginForm(props) {
 
     // this is used as a callback from the UserContext to pass up the state of
     // authenticating / deauthenticating a user, and provides timed-out status updates
-    const getAuthenticationStatus = (status) => {
-        console.log(status);
-        setSubmitResult(status);
-        setTimeout(() => {setSubmitResult('')}, 4000); 
+    const getFeedback = (message) => {
+        console.log(message);
+        setSubmitResult(message);
+        setTimeout(() => { setSubmitResult('') }, 4000);
+    }
+
+    // anotherCallback to set the authentication fla
+    const getAuthorisationStatus = (isAuthorised) => {
+        console.log(`authorisation callback reuslt: ${isAuthorised}`);
+        setIsAuthorised(isAuthorised);
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (checkInputFields()) {
-            setSubmitResult('Logging in..');
+            // setSubmitResult('Logging in..');
+            // let context verify the user credentials, which will chage the user value
+            // and provide feedback as to status via the 2nd parameter callback function.
             handleAuthenticateUser({
                 email: userCredentials.email,
                 password: userCredentials.password,
                 // anonymous function to update the submitResult from the context
-            }, getAuthenticationStatus)
-
+            }, getAuthorisationStatus, getFeedback);
         }
-        console.log(user);
+        // console.log(user);
     }
 
     const handleLogout = () => {
-        handleAuthenticateUser({}, getAuthenticationStatus);
+        handleAuthenticateUser({}, getAuthorisationStatus);
+        setIsAuthorised(false);
+        setUserCredentials({ email: '', password: '' });
     }
 
-    console.log(user);
-    // on successful login, this is returned, for this to persist, during refereshes,
-    // the context should rely on the server to keep a record of who is logged in,
-    // works for now server side.
-    if (user.email) {
+    // on successful login, this is returned.
+    // the context should rely on the server to keep a record of who is logged in
+    if (isAuthorised) {
         return (
             <Box>
                 <p>Welcome {user.email}!</p>
@@ -85,7 +93,7 @@ export default function LoginForm(props) {
                 </Box>
             </Box>
         )
-    }
+    };
 
     return (
         <Container component="main" maxWidth="xs">

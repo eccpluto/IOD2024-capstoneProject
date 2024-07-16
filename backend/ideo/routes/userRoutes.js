@@ -11,8 +11,9 @@ Router.post("/create", (req, res) => {
     userController.createUser(req, res);
 })
 
-// get all users
+// get users, and entrypoint into users for email search
 Router.get("/", (req, res) => {
+    console.log(req.query);
     userController.getUsers(req, res);
 })
 
