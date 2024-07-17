@@ -6,6 +6,8 @@ const UserContext = createContext();
 
 // describe how context is used by providing an interface
 export const UserProvider = (props) => {
+    // check user before proceding
+    // store user in context, authorise using a hook in the component, not in the context
 
     const [user, setUser] = useState({ email: '', password: '' });                          // track authenticating user
     // const [isAuthenticated, setIsAuthenticated] = useState(false);                       // authentication flag
