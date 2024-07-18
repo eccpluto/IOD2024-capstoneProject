@@ -1,6 +1,6 @@
 import { Box, Container } from "@mui/material"
-import { TitleDisplayer } from "../components/common"
-import LoginForm from "../components/LoginForm"
+import { Header } from "../components/common"
+import { LoginForm } from "../components"
 
 export default function LoginPage(props) {
     return (
@@ -10,7 +10,7 @@ export default function LoginPage(props) {
                 p: 2,
                 borderRadius: 4,
             }}>
-                <TitleDisplayer title='Login' />
+                <Header title='Login' />
                 <LoginForm/>
             </Box>
         </Container>
