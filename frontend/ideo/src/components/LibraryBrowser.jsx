@@ -4,6 +4,8 @@ export default function LibraryBrowser (props) {
     const { userId } = props;
 
     return(
-        <></>
+        <>
+        {userId}
+        </>
     )
 }
