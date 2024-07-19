@@ -2,30 +2,56 @@ import { Avatar, Box, Button, Container, TextField, Typography } from "@mui/mate
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
+import useMongoDb from "../hooks/useMongoDb";
 
 
 export default function LoginForm(props) {
 
-    // userContext handles contextual things about the user, like current user and authentication
-    const { user, handleAuthenticateUser } = useUserContext();
-    const [isAuthorised, setIsAuthorised] = useState(false);
+    // userContext is an application-wide state object, and is used to handle
+    // if a user is logged in / authenticated in this case
+    const { user, handleUpdateUser } = useUserContext();
+
+    // Authentication will be handled by simply updating the user
+    // state which is stored in the UserContext instance.
+    // Authentication depends on the user being a valid account,
+    // therefore we will consume the useMongoDb hook for getting this information.
+    const [dbResult, setRequestConfig, doExecute] = useMongoDb();
+
+
+    // since the dbResult object is dynamic depending on our database
+    // fetching callback (later in the code), we need to observe this result
+    // in order to hande user authentication. The hook system will cause this
+    // component to render when the dbResult updates automatically, we just
+    // need to observe it:
+    // console.log(`dbresult is: ${JSON.stringify(dbResult)}`);
+    useEffect(() => {
+        // try authenticate the user
+        const tryAuthenticateUser = async () => {
+            if (dbResult && dbResult.data) {
+                handleUpdateUser(dbResult.data);
+            } else if (dbResult){
+                getFeedback("User not found or password incorrect.");
+            } else {
+                console.log("No user authenticated.");
+            }
+        };
+        tryAuthenticateUser();
+    }, [dbResult])
 
     // internal states of component
     const [userCredentials, setUserCredentials] = useState({
         email: '',
         password: '',
     });
-    // this lets us alert user to the authentication state
     const [submitResult, setSubmitResult] = useState('');
 
-    // internal component functions
+    // internal handlers
     const handleEmailChange = (event) => {
         setUserCredentials({
             email: event.target.value,
             password: userCredentials.password,
         })
     }
-
     const handlePasswordChange = (event) => {
         setUserCredentials({
             email: userCredentials.email,
@@ -33,61 +59,75 @@ export default function LoginForm(props) {
         })
     }
 
+    // client-side validation of input values
     const checkInputFields = () => {
         let result = true;
         let uc = userCredentials;
         if (uc.password.length < 5) {
-            setSubmitResult('Password must be greater than 5 characters long.');
+            getFeedback('Password must be greater than 5 characters long.');
             result = false;
         } else if (uc.password === uc.email) {
-            setSubmitResult('Email cannot be the same as password.');
+            getFeedback('Email cannot be the same as password.');
             result = false;
         }
         return result;
     }
 
-    // this is used as a callback from the UserContext to pass up the state of
-    // authenticating / deauthenticating a user, and provides timed-out status updates
+    // provide some (timed-out) feedback to user
     const getFeedback = (message) => {
         console.log(message);
         setSubmitResult(message);
         setTimeout(() => { setSubmitResult('') }, 4000);
     }
 
-    // anotherCallback to set the authentication fla
-    const getAuthorisationStatus = (isAuthorised) => {
-        console.log(`authorisation callback reuslt: ${isAuthorised}`);
-        setIsAuthorised(isAuthorised);
+    // copied directly from UserContext
+    // begin the authentication process
+    const handleAuthenticateUser = ({ email, password }) => {
+        // logout condition
+        if (!email && !password) {
+            getFeedback("Logged out.")
+            return;
+        }
+        try {
+            console.log(`querying database for user:\n ${email}`);
+            getFeedback('Logging in..')
+
+            // set an enpoint (query), and execute a database query :
+            setRequestConfig('get', `http://localhost:8080/api/users?email=${email}&password=${password}`);
+            // make the request - this is will return immediately, but the dbResult
+            // will be updated asynchronously, which will be observed by the useEffect above.
+            doExecute();
+
+        } catch (e) {
+            console.error(`Issue authenticating user: ${e}`);
+            getFeedback(`${e}`);
+        }
     }
 
+    // respond to a login request
     const handleSubmit = (event) => {
         event.preventDefault();
         if (checkInputFields()) {
-            // setSubmitResult('Logging in..');
-            // let context verify the user credentials, which will chage the user value
-            // and provide feedback as to status via the 2nd parameter callback function.
             handleAuthenticateUser({
                 email: userCredentials.email,
                 password: userCredentials.password,
-                // anonymous function to update the submitResult from the context
-            }, getAuthorisationStatus, getFeedback);
+            });
         }
-        // console.log(user);
     }
 
     const handleLogout = () => {
-        handleAuthenticateUser({}, getAuthorisationStatus);
-        setIsAuthorised(false);
         setUserCredentials({ email: '', password: '' });
+        handleUpdateUser({});
     }
 
     // on successful login, this is returned.
     // the context should rely on the server to keep a record of who is logged in
-    if (isAuthorised) {
+    if (user.name) {
+        console.log(`'logged in state': user value is: ${JSON.stringify(user)}`);
         return (
             <Box>
-                <p>Welcome {user.email}!</p>
-                {submitResult}
+                <p>Welcome {user.name}!</p>
+                {/* {submitResult} */}
                 <Box>
                     <button onClick={handleLogout}>Log Out</button>
                 </Box>
@@ -95,6 +135,8 @@ export default function LoginForm(props) {
         )
     };
 
+    // code from here will only run if no user is present in UserContext
+    console.log(`'logged out state:'user value is: ${JSON.stringify(user)}`)
     return (
         <Container component="main" maxWidth="xs">
             <Box sx={{
