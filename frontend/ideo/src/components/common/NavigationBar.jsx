@@ -98,7 +98,7 @@ export default function NavigationBar(props) {
                             <NavLink to={"/account"}>Account</NavLink>
                         </MenuItem>
                         <MenuItem key="logout" onClick={() => {
-                            handleCloseAll;
+                            handleCloseAll();
                             handleUpdateUser(null);
                         }
                         }>
