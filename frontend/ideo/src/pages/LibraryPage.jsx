@@ -6,12 +6,11 @@ import { useUserContext } from "../contexts/UserContext";
 
 export default function LibraryPage(props) {
 
-    // library needs to be able to access and modify user-specific resources
-    // UserContext should be fixed before continuing.
     const { user}  = useUserContext();
 
     return (
-        <Container maxWidth="lg" sx={{ height: '100vh' }}>
+        // all pages are in a container
+        <Container maxWidth="xl" sx={{ height: '100vh' }}>
             {/* components are placed in the grid system */}
             <Grid
                 container
@@ -21,20 +20,20 @@ export default function LibraryPage(props) {
                 alignItems="flex-end"
             >
                 {/* header, fill all available space in grid container*/}
-                <Grid container item xs={12}>
+                <Grid item xs={12}>
                     <Header title="Library" />
                 </Grid>
 
                 {/* resource browser */}
-                <Grid container item xs={12} md={4} lg={3}>
+                <Grid item xs={12}>
                     <LibraryBrowser userId={user.id}/>
                 </Grid>
 
                 {/* TODO - hide this on xs screens, potentially popup functionality for viewer */}
                 {/* resource viewer */}
-                <Grid container item xs={12} md={4} lg={3}>
+                {/* <Grid container item xs={12} md={4} lg={3}>
                     <ResourceViewer />
-                </Grid>
+                </Grid> */}
 
             </Grid>
 
