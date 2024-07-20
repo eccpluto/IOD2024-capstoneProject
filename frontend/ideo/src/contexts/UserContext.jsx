@@ -8,7 +8,14 @@ export const UserProvider = (props) => {
     // default on first call is no user - this will persist with another user
     // if logged in for that session.
 
-    const [user, setUser] = useState(null);
+    const tempUser = {
+        id: 1234,
+        email: "tony@testuser.com",
+        name: "Tony the Tiger",
+        theme: "Light"
+    }
+
+    const [user, setUser] = useState(tempUser);
 
     const handleUpdateUser = (user) => {
         user ?

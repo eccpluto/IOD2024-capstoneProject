@@ -7,7 +7,7 @@ import { useUserContext } from "../../contexts/UserContext";
 // A bar at the top of the viewport to allow the user to navigate the app
 export default function NavigationBar(props) {
 
-    const { user } = useUserContext();
+    const { user, handleUpdateUser } = useUserContext();
 
     // anchor elements for determining menu to popover
     const [anchorElMenu, setAnchorElMenu] = useState(null);
@@ -97,7 +97,11 @@ export default function NavigationBar(props) {
                         <MenuItem key="account" onClick={handleCloseAll}>
                             <NavLink to={"/account"}>Account</NavLink>
                         </MenuItem>
-                        <MenuItem key="logout" onClick={handleCloseAll}>
+                        <MenuItem key="logout" onClick={() => {
+                            handleCloseAll;
+                            handleUpdateUser(null);
+                        }
+                        }>
                             <NavLink to={"/logout"}>Logout</NavLink>
                         </MenuItem>
                     </Menu>
