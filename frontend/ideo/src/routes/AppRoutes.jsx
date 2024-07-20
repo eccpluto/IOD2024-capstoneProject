@@ -1,5 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import { AccountPage, BoardsPage, LandingPage, LibraryPage, LoginPage, PageNotFoundPage } from "../pages";
+import {
+    AccountPage,
+    BoardsPage,
+    LandingPage,
+    LibraryPage,
+    LoginPage,
+    LogoutPage,
+    PageNotFoundPage
+} from "../pages";
 
 export default function AppRoutes(props) {
     return (
@@ -9,6 +17,7 @@ export default function AppRoutes(props) {
             <Route path="/boards" element={<BoardsPage{...props} />} />
             <Route path="/library" element={<LibraryPage{...props} />} />
             <Route path="/login" element={<LoginPage{...props} />} />
+            <Route path="/logout" element={<LogoutPage{...props} />} />
             <Route path="*" element={<PageNotFoundPage{...props} />} />
         </Routes>
     )

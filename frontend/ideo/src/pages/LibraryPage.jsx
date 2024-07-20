@@ -2,17 +2,16 @@ import Container from "@mui/material/Container";
 import { Header } from "../components/common/";
 import { Grid } from "@mui/material";
 import { LibraryBrowser, ResourceViewer } from "../components";
-// import { useUserContext } from "../contexts/UserContext";
+import { useUserContext } from "../contexts/UserContext";
 
 export default function LibraryPage(props) {
 
     // library needs to be able to access and modify user-specific resources
     // UserContext should be fixed before continuing.
-    // const [user, setUser] = useUserContext;
+    const { user}  = useUserContext();
 
     return (
         <Container maxWidth="lg" sx={{ height: '100vh' }}>
-
             {/* components are placed in the grid system */}
             <Grid
                 container
