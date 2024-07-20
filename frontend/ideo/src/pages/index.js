@@ -5,4 +5,5 @@ export { default as BoardsPage } from './BoardsPage';
 export { default as LandingPage } from './LandingPage';
 export { default as LibraryPage } from './LibraryPage';
 export { default as LoginPage } from './LoginPage';
+export { default as LogoutPage } from './LogoutPage';
 export { default as PageNotFoundPage } from './PageNotFound';
