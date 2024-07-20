@@ -6,7 +6,7 @@ import { useUserContext } from "../contexts/UserContext";
 
 export default function LibraryPage(props) {
 
-    const { user}  = useUserContext();
+    const { user } = useUserContext();
 
     return (
         // all pages are in a container
@@ -26,7 +26,7 @@ export default function LibraryPage(props) {
 
                 {/* resource browser */}
                 <Grid item xs={12}>
-                    <LibraryBrowser userId={user.id}/>
+                    <LibraryBrowser userId={user.id} />
                 </Grid>
 
                 {/* TODO - hide this on xs screens, potentially popup functionality for viewer */}
@@ -36,7 +36,6 @@ export default function LibraryPage(props) {
                 </Grid> */}
 
             </Grid>
-
         </Container>
     )
 }
