@@ -7,20 +7,31 @@ import { useEffect, useState } from "react";
 export default function useUnpaywallData() {
 
     const API_BASE_URL = "https://api.unpaywall.org/v2";
+    const API_OA = "is_oa=true";
+    const API_EMAIL = "email=unpaywall_01@example.com";
     const [data, setData] = useState(null);
     const [url, setURL] = useState(null);
 
-    function handleGetData(enpoint) {
-        const request = API_BASE_URL + enpoint;
-        console.log(request);
+    function handleGetData(query) {
+        const request = `${API_BASE_URL}/search?query=${query}&${API_OA}&${API_EMAIL}`;
+        // console.log(request);
         setURL(request);
-    }
+    };
 
     // serialise the data so that we only retain what we want in our model
     function serialiseData(data) {
-        let serialisedData = {};
+        // map the data we are interested in
+        const serialisedData = data.map((element) => {
+            // console.log(element);
+            return {
+                title: element.response.title,
+                url: element.response.doi_url,
+                abstract: element.snippet,
+                pdf_link: element.response.best_oa_location.url_for_pdf
+            }
+        });
         setData(serialisedData)
-    }
+    };
 
     // observe the url state and fetch data when change detected
     useEffect(() => {

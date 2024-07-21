@@ -17,7 +17,7 @@ export default function LibraryBrowser(props) {
     <Container>
       {/* layout the resources in a grid */}
       <button onClick={() =>
-        getUnpaywallData("/search?query=askljhasdfkljhasdf&is_oa=true&email=unpaywall_01@example.com")}>
+        getUnpaywallData("gravity")}>
         Fetch
       </button>
       <Grid
@@ -28,22 +28,13 @@ export default function LibraryBrowser(props) {
         alignItems="flex-end"
       >
         {/* if we have data, we map these to cards */}
-        {unpaywallData && unpaywallData.map((resorce) => {
-          // pass the data into the cards - already serialised
-          // <ResourceCard
+        {unpaywallData && unpaywallData.map((resource, index) => {
+          return (
+            <Grid item xs={6} sm={4} lg={3} xl={2} key={index}>
+              <ResourceCard resource={resource} resourceType="article"  />
+            </Grid>
+          )
         })}
-        <Grid item xs={6} sm={4} lg={3} xl={2}>
-          <ResourceCard />
-        </Grid>
-        <Grid item xs={6} sm={4} lg={3} xl={2}>
-          <ResourceCard />
-        </Grid>
-        <Grid item xs={6} sm={4} lg={3} xl={2}>
-          <ResourceCard />
-        </Grid>
-        <Grid item xs={6} sm={4} lg={3} xl={2}>
-          <ResourceCard />
-        </Grid>
       </Grid>
       {/* <Box
         height={200}
