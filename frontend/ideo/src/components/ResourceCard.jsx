@@ -3,12 +3,15 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useState } from "react";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { IFrameModal } from "./common";
 
 // display a resource
 // this could be from a search result(s), or from locally saved resources
 export default function ResourceCard(props) {
 
     const [expanded, setExpanded] = useState(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const resource = props.resource;
     const resourceType = props.resourceType;
@@ -23,11 +26,14 @@ export default function ResourceCard(props) {
     }
 
     const handleOpenLink = () => {
-        // open the associated DOI link of the article in new tab
+    }
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
     }
 
     const handleOpenFile = () => {
-        // pull the associated file using the file link and display in pdfjs viewer
+        setIsModalOpen(true);
     }
 
     // console.log(resource);
@@ -97,6 +103,7 @@ export default function ResourceCard(props) {
                     </AccordionDetails>
                 </Accordion>
             </Box>
+            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.url} name={resource.title}/>
         </Paper >
     )
 }
