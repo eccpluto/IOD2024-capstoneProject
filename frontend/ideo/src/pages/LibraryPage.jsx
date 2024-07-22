@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
-import { Header } from "../components/common/";
+import { Header, SearchBar } from "../components/common/";
 import { Grid } from "@mui/material";
-import { LibraryBrowser, ResourceViewer } from "../components";
+import { ResourceBrowser, ResourceViewer } from "../components";
 import { useUserContext } from "../contexts/UserContext";
 
 export default function LibraryPage(props) {
@@ -24,9 +24,9 @@ export default function LibraryPage(props) {
                     <Header title="Library" />
                 </Grid>
 
-                {/* resource browser */}
+                {/* resource browser */}                
                 <Grid item xs={12}>
-                    <LibraryBrowser userId={user.id} />
+                    <ResourceBrowser userId={user.id} sourceTarget="library"/>
                 </Grid>
 
                 {/* TODO - hide this on xs screens, potentially popup functionality for viewer */}
