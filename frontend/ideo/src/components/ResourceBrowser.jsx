@@ -13,7 +13,8 @@ export default function ResourceBrowser(props) {
       {/* layout the resources in a grid */}
       <Grid
         container
-        spacing={3}
+        padding={2}
+        spacing={4}
         direction="row"
         justifyContent="center"
         alignItems="flex-end"
@@ -21,8 +22,8 @@ export default function ResourceBrowser(props) {
         {/* if we have data, we map these to cards */}
         {resourceArray && resourceArray.map((resource, index) => {
           return (
-            <Grid item xs={6} sm={4} lg={3} xl={2} key={index}>
-              <ResourceCard resource={resource} resourceType="article" />
+            <Grid item key={index}>
+              <ResourceCard resource={resource} resourceType="article" userId={userId} />
             </Grid>
           )
         })}
