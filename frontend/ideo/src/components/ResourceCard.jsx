@@ -3,29 +3,30 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useState } from "react";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { IFrameModal } from "./common";
+import useMongoDb from "../hooks/useMongoDb";
 
 // display a resource
 // this could be from a search result(s), or from locally saved resources
 export default function ResourceCard(props) {
 
     const [expanded, setExpanded] = useState(false);
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // hacky ensure initial population of library from db occurs once
+    const [initialRender, setInitialRender] = useState(true);
 
     const resource = props.resource;
     const resourceType = props.resourceType;
-    // userId allows us to present an option to save the resource on each card
-    // const userId = props.userId;
-
+    const userId = props.userId;
+    
     // unpayway provides some html-formatted strings
     const stripHTMLTags = (html) => {
         let temp = document.createElement('div');
         temp.innerHTML = html;
         return temp.textContent || temp.innerText || "";
-    }
-
-    const handleOpenLink = () => {
     }
 
     const handleModalClose = () => {
@@ -34,6 +35,10 @@ export default function ResourceCard(props) {
 
     const handleOpenFile = () => {
         setIsModalOpen(true);
+    }
+
+    const handlePushToLibrary = () => {
+
     }
 
     // console.log(resource);
@@ -47,7 +52,7 @@ export default function ResourceCard(props) {
                 padding={1}
                 overflow={"visible"}
                 height={150}
-                width={200}
+                width={250}
             >
                 <Box
                     display={"flex"}
@@ -76,6 +81,9 @@ export default function ResourceCard(props) {
                         <IconButton onClick={handleOpenFile}>
                             <FileOpenIcon />
                         </IconButton>
+                        <IconButton onClick={handlePushToLibrary}>
+                            <AddCircleIcon />
+                        </IconButton>
 
                     </Box>
 
@@ -103,7 +111,7 @@ export default function ResourceCard(props) {
                     </AccordionDetails>
                 </Accordion>
             </Box>
-            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.url} name={resource.title}/>
+            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.url} name={resource.title} />
         </Paper >
     )
 }

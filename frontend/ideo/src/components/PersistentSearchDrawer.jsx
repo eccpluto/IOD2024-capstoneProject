@@ -26,6 +26,7 @@ export default function PersistentSearchDrawer(props) {
     const theme = useTheme();
     const open = props.open;
     const handleDrawerClose = props.handleDrawerClose
+    const handlePushToLibrary = props.handlePushToLibrary
 
     // for online resouces, hook into unpaywall
     const [unpaywallData, getUnpaywallData] = useUnpaywallData();
@@ -64,7 +65,7 @@ export default function PersistentSearchDrawer(props) {
             </DrawerHeader>
             <Divider />
             {/* send result here to display */}
-            <ResourceBrowser resourceArray={unpaywallData} />
+            <ResourceBrowser resourceArray={unpaywallData} handlePushToLibrary={handlePushToLibrary} />
         </Drawer>
     );
 }

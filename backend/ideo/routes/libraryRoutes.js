@@ -16,6 +16,11 @@ Router.get("/:id", (req, res) => {
     libraryController.getLibraryById(req, res);
 })
 
+Router.get("/", (req, res) => {
+    console.log(`request sent to get "/": ${JSON.stringify(req.query)}`);
+    libraryController.getLibraries(req, res);
+})
+
 // update a Library by Id
 Router.put("/:id", (req, res) => {
     libraryController.updateLibraryById(req, res);

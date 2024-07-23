@@ -3,14 +3,36 @@ import { Header, SearchBar } from "../components/common/";
 import { Grid } from "@mui/material";
 import { ResourceBrowser, ResourceViewer } from "../components";
 import { useUserContext } from "../contexts/UserContext";
+import useMongoDb from "../hooks/useMongoDb";
+import { useEffect, useState } from "react";
 
 export default function LibraryPage(props) {
 
+    // get the user id, this value will allow us to get
+    // the corresponding library via library.owner FK
     const { user } = useUserContext();
+
+    // hacky ensure initial population of library from db occurs once
+    const [initialRender, setInitialRender] = useState(true);
+
+    // local database will be resource target for resource browser
+    const [dbResult, setRequestConfig, doExecute] = useMongoDb();
+
+    // get the library
+    useEffect(() => {
+        if (initialRender) {
+            setRequestConfig("get", `http://localhost:8080/api/libraries?owner=669616961527843b63185c1a`);
+            doExecute();
+        }
+        return () => {
+            setInitialRender(false);
+        }
+    }, [dbResult])
 
     return (
         // all pages are in a container
         <Container maxWidth="xl" sx={{ height: '100vh' }}>
+            {/* {} */}
             {/* components are placed in the grid system */}
             <Grid
                 container
@@ -24,17 +46,10 @@ export default function LibraryPage(props) {
                     <Header title="Library" />
                 </Grid>
 
-                {/* resource browser */}                
+                {/* resource browser, but populated with library resources */}
                 <Grid item xs={12}>
-                    <ResourceBrowser userId={user.id} sourceTarget="library"/>
+                    {dbResult && (<ResourceBrowser libraryOwner={user.id} resourceArray={dbResult.resources} />)}
                 </Grid>
-
-                {/* TODO - hide this on xs screens, potentially popup functionality for viewer */}
-                {/* resource viewer */}
-                {/* <Grid container item xs={12} md={4} lg={3}>
-                    <ResourceViewer />
-                </Grid> */}
-
             </Grid>
         </Container>
     )

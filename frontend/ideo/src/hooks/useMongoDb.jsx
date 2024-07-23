@@ -39,6 +39,7 @@ export default function useMongoDb() {
                 console.log("No requestConfig provided, dbResult will be invalid.");
                 break;
         }
+        console.log(requestConfig);
     }
 
     // this dispatches a call to update the enpoint and http method
@@ -49,7 +50,7 @@ export default function useMongoDb() {
     // this makes database queries based on the endpoint configuration
     // it observes the endpointConfig, which defines both the endpoint and http method.
     useEffect(() => {
-        if (requestConfig.url) {
+        if (requestConfig.url && toExecute) {
             // console.log(JSON.stringify(requestConfig));
             switch (requestConfig.method) {
                 case "post":
