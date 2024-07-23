@@ -22,9 +22,11 @@ const getLibraries = (req, res) => {
     console.log(`Getting Libraries, params: ${JSON.stringify(req.query)}.`);
     if (req.query.owner) {
         libraryModel.findOne({ owner: req.query.owner })
+            .populate('resources')
             .then(data => res.send({ result: 200, data: data }))
             .catch(err => res.send({ result: 500, error: err.message }));
     } else {
+        console.log("finding all")
         libraryModel.find({})
             .then(data => res.send({ result: 200, data: data }))
             .catch(err => res.send({ result: 500, error: err.message }))

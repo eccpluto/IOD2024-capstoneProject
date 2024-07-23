@@ -8,6 +8,7 @@ const libraryController = controllers.libraryController;
 
 // create a new Library
 Router.post("/create", (req, res) => {
+    console.log(JSON.stringify(req.query))
     libraryController.createLibrary(req, res);
 })
 

@@ -12,19 +12,24 @@ export default function LibraryPage(props) {
     // the corresponding library via library.owner FK
     const { user } = useUserContext();
 
+    const [library, setLibrary] = useState('');
+
+    // const [attemptingToGetLib, setAttempingToGetLib] = useState(false);
+
     // hacky ensure initial population of library from db occurs once
     const [initialRender, setInitialRender] = useState(true);
 
-    // local database will be resource target for resource browser
-    const [dbResult, setRequestConfig, doExecute] = useMongoDb();
+    // ensure a library exists - try creating one which will fail if already exists
+    // and will allow us to then set the library regardless
+    // console.log(user.id)
 
-    // get the library
+    const initialData = { owner: user.id }
+    const [dbResult, setRequestConfig, doExecute] = useMongoDb()
+
     useEffect(() => {
-        if (initialRender) {
-            setRequestConfig("get", `http://localhost:8080/api/libraries?owner=669616961527843b63185c1a`);
+        if(initialRender) {
+            setRequestConfig("get", `http://localhost:8080/api/libraries`, { owner: user.id })
             doExecute();
-        }
-        return () => {
             setInitialRender(false);
         }
     }, [dbResult])
@@ -48,7 +53,7 @@ export default function LibraryPage(props) {
 
                 {/* resource browser, but populated with library resources */}
                 <Grid item xs={12}>
-                    {dbResult && (<ResourceBrowser libraryOwner={user.id} resourceArray={dbResult.resources} />)}
+                    {dbResult && (<ResourceBrowser libraryId={user.id} resourceArray={dbResult.resources} />)}
                 </Grid>
             </Grid>
         </Container>
