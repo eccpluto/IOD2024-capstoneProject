@@ -74,15 +74,15 @@ export default function NavigationBar(props) {
                         <MenuItem key="landing" onClick={handleCloseAll}>
                             <NavLink to={"/"}>Home</NavLink>
                         </MenuItem>
-                        {(!user) && (<MenuItem key="login" onClick={handleCloseAll}>
+                        {(!user.name) && (<MenuItem key="login" onClick={handleCloseAll}>
                             <NavLink to={"/login"}>Login</NavLink>
                         </MenuItem>)}
-                        {(user) && (<MenuItem key="library" onClick={handleCloseAll}>
+                        {(user.name) && (<MenuItem key="library" onClick={handleCloseAll}>
                             <NavLink to={"/library"}>Library</NavLink>
                         </MenuItem>)}
                     </Menu>
                     {/* Account button */}
-                    {(user) && (
+                    {(user.name) && (
                         <IconButton
                             size="large"
                             edge="start"
@@ -112,7 +112,7 @@ export default function NavigationBar(props) {
                         </MenuItem>
                         <MenuItem key="logout" onClick={() => {
                             handleCloseAll();
-                            handleUpdateUser(null);
+                            handleUpdateUser({});
                         }
                         }>
                             <NavLink to={"/logout"}>Logout</NavLink>

@@ -130,7 +130,7 @@ export default function LoginForm(props) {
 
     // on successful login, this is returned.
     // the context should rely on the server to keep a record of who is logged in
-    if (user) {
+    if (user.name) {
         console.log(`'logged in state': user value is: ${JSON.stringify(user)}`);
         return (
             <Box>

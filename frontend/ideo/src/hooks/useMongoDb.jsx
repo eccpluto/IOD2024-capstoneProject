@@ -70,7 +70,8 @@ export default function useMongoDb() {
                     break;
 
                 case "put":
-                    axios.put(requestConfig.url)
+                    console.log(`calling axios.put: ${JSON.stringify(requestConfig)}`)
+                    axios.put(requestConfig.url, requestConfig.data)
                         .then(response => setDbResult(response.data))
                         .catch(err => console.log(err));
                     break;

@@ -7,3 +7,4 @@ export { default as ResourceCard } from './ResourceCard';
 export { default as PersistentSearchDrawer } from './PersistentSearchDrawer';
 export { default as PDFViewer } from './PDFViewer'; 
 export { default as CreateAccountForm } from './CreateAccountForm';
+export { default as ManageAcountForm } from './ManageAccountForm'

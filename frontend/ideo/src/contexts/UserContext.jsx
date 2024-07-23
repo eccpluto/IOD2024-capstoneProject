@@ -8,24 +8,25 @@ export const UserProvider = (props) => {
     // default on first call is no user - this will persist with another user
     // if logged in for that session.
 
-    const tempUser = {
-        id: 1234,
-        email: "tony@testuser.com",
-        name: "Tony the Tiger",
-        theme: "Light"
-    }
+    // const tempUser = {
+    //     id: 1234,
+    //     email: "tony@testuser.com",
+    //     name: "Tony the Tiger",
+    //     theme: "Light"
+    // }
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({});
 
     const handleUpdateUser = (user) => {
+        console.log(`Setting UserContext: ${JSON.stringify(user)}`)
         user ?
             setUser({       // user provided (login)
-                id: user._ud,
+                id: user._id,
                 email: user.email,
                 name: user.name,
                 theme: user.theme,
             }               // empty user (logout)
-            ) : setUser(null);
+            ) : setUser({});
     }
 
     return (
