@@ -13,7 +13,7 @@ export default function useMongoDb() {
     // the requestConfig object descibes the database request.
     // you MUST call setEndpointConfig in consumeing code to create
     // a viable configuration, before calling doExectute();
-    const [requestConfig, dispatch] = useReducer(reducer, { url: "", method: "" });
+    const [requestConfig, dispatch] = useReducer(reducer, { url: "", method: "", data: null });
 
     // flag that will activate the useEffect to execute the query
     const [toExecute, setToExecute] = useState('false');
@@ -23,28 +23,30 @@ export default function useMongoDb() {
         console.log('hello')
         switch (action.method) {
             case "post":
-                return requestConfig = { url: action.url, method: "post" };
+                console.log('setting post request')
+                return requestConfig = { url: action.url, method: "post", data: action.data };
 
             case "get":
-                console.log('there');
-                return requestConfig = { url: action.url, method: "get" };
+                console.log('setting get request')
+                return requestConfig = { url: action.url, method: "get", data: action.data };
 
             case "put":
-                return requestConfig = { url: action.url, method: "put" };
+                console.log('setting put request')
+                return requestConfig = { url: action.url, method: "put", data: action.data };
 
             case "delete":
-                return requestConfig = { url: action.url, method: "delete" };
+                console.log('setting delete request')
+                return requestConfig = { url: action.url, method: "delete", data: action.data };
 
             default:
                 console.log("No requestConfig provided, dbResult will be invalid.");
                 break;
         }
-        console.log(requestConfig);
     }
 
     // this dispatches a call to update the enpoint and http method
-    function setRequestConfig(method, url) {
-        dispatch({ url: url, method: method });
+    function setRequestConfig(method, url, data = null) {
+        dispatch({ url: url, method: method, data: data });
     }
 
     // this makes database queries based on the endpoint configuration
@@ -54,7 +56,8 @@ export default function useMongoDb() {
             // console.log(JSON.stringify(requestConfig));
             switch (requestConfig.method) {
                 case "post":
-                    axios.post(requestConfig.url)
+                    console.log(`calling axios.post: ${JSON.stringify(requestConfig)}`)
+                    axios.post(requestConfig.url, requestConfig.data )
                         .then(response => setDbResult(response.data))
                         .catch(err => console.log(err));
                     break;

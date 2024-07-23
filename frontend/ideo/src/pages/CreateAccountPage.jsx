@@ -1,8 +1,8 @@
 import { Box, Container } from "@mui/material"
 import { Header } from "../components/common"
-import { LoginForm } from "../components"
+import { CreateAccountForm } from "../components"
 
-export default function LoginPage(props) {
+export default function CreateAccountPage(props) {
     return (
         <Container maxWidth="xl">
             <Box sx={{
@@ -10,8 +10,8 @@ export default function LoginPage(props) {
                 p: 2,
                 borderRadius: 4,
             }}>
-                {/* <Header title='Login' /> */}
-                <LoginForm/>
+                {/* <Header title='Create Account' /> */}
+                <CreateAccountForm />
             </Box>
         </Container>
     )

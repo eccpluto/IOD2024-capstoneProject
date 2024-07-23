@@ -15,7 +15,7 @@ export const UserProvider = (props) => {
         theme: "Light"
     }
 
-    const [user, setUser] = useState(tempUser);
+    const [user, setUser] = useState(null);
 
     const handleUpdateUser = (user) => {
         user ?

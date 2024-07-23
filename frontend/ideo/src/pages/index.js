@@ -7,3 +7,4 @@ export { default as LibraryPage } from './LibraryPage';
 export { default as LoginPage } from './LoginPage';
 export { default as LogoutPage } from './LogoutPage';
 export { default as PageNotFoundPage } from './PageNotFound';
+export { default as CreateAccountPage } from './CreateAccountPage';

@@ -3,9 +3,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import useMongoDb from "../hooks/useMongoDb";
+import { useNavigate } from "react-router-dom";
 
 
 export default function LoginForm(props) {
+
+    // for navigating to account creation page
+    const navigate = useNavigate()
 
     // userContext is an application-wide state object, and is used to handle
     // if a user is logged in / authenticated in this case
@@ -29,7 +33,7 @@ export default function LoginForm(props) {
         const tryAuthenticateUser = async () => {
             if (dbResult && dbResult.data) {
                 handleUpdateUser(dbResult.data);
-            } else if (dbResult){
+            } else if (dbResult) {
                 getFeedback("User not found or password incorrect.");
             } else {
                 console.log("No user authenticated.");
@@ -120,6 +124,10 @@ export default function LoginForm(props) {
         handleUpdateUser({});
     }
 
+    const handleCreateAccount = () => {
+        navigate("/create")
+    }
+
     // on successful login, this is returned.
     // the context should rely on the server to keep a record of who is logged in
     if (user) {
@@ -181,9 +189,18 @@ export default function LoginForm(props) {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{ mt: 3, mb: 1 }}
                     >
                         Sign In
+                    </Button>
+                    <Button
+                        type="button"
+                        fullWidth
+                        variant="contained"
+                        onClick={handleCreateAccount}
+                        sx={{ mt: 1, mb: 2 }}
+                    >
+                        Create
                     </Button>
                 </Box>
             </Box>

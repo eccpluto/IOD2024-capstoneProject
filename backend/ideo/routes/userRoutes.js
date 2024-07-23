@@ -8,6 +8,7 @@ const userController = controllers.userController;
 
 // create a new user
 Router.post("/create", (req, res) => {
+    console.log(`Received post request at /create: ${JSON.stringify(req.query)}`)
     userController.createUser(req, res);
 })
 
