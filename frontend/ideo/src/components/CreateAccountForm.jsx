@@ -24,12 +24,13 @@ export default function CreateAccountForm(props) {
             console.log(`checking result: ${JSON.stringify(dbResult)}`)
             // checking http response.result
             if (dbResult && dbResult.result == "200") {
-                console.log()
                 // acount created, create a library for this user
                 handleCreateLibrary(dbResult.data._id);
                 // we should also render a different UI state
                 getFeedback('Account successfully created. Returning to login page.')
                 setTimeout(() => navigate("/login"), 4000);
+            } else if (dbResult && dbResult.result == "500") {
+                getFeedback(dbResult.error);
             }
         };
         onDbResponse();
