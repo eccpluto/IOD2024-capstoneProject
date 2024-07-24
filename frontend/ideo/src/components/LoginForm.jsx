@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import useMongoDb from "../hooks/useMongoDb";
 import { useNavigate } from "react-router-dom";
+import { useLibraryContext } from "../contexts/LibraryContext";
+import useGetLibrary from "../hooks/useGetLibrary";
+import useGetUser from "../hooks/useGetUser";
 
 
 export default function LoginForm(props) {
@@ -11,37 +14,37 @@ export default function LoginForm(props) {
     // for navigating to account creation page
     const navigate = useNavigate()
 
-    // userContext is an application-wide state object, and is used to handle
-    // if a user is logged in / authenticated in this case
+    /**
+     * authentication depends on there being a match in the database,
+     * we therefore hook into the dabase via the handleGetDbUser callback
+     * abstraction, and observe the corresponding flags
+     */
+    const [errorDbUser, loadingDbUser, dbUser, handleGetDbUser] = useGetUser();
     const { user, handleUpdateUser } = useUserContext();
 
+    /**
+     * we also want to synchronise out LibraryContext, which depends on the
+     * user above being authenticated first
+     */
+    const [errorDbLibrary, loadingDbLibrary, dbLibrary, handleGetDbLibrary] = useGetLibrary();
+    const { library, handleUpdateLibrary } = useLibraryContext();
 
-    // Authentication will be handled by simply updating the user
-    // state which is stored in the UserContext instance.
-    // Authentication depends on the user being a valid account,
-    // therefore we will consume the useMongoDb hook for getting this information.
-    const [dbResult, setRequestConfig, doExecute] = useMongoDb();
-
-
-    // since the dbResult object is dynamic depending on our database
-    // fetching callback (later in the code), we need to observe this result
-    // in order to hande user authentication. The hook system will cause this
-    // component to render when the dbResult updates automatically, we just
-    // need to observe it:
-    // console.log(`dbresult is: ${JSON.stringify(dbResult)}`);
+    // observe for changes in the dbUser, which we can then synchronise our UserContext with.
     useEffect(() => {
-        // try authenticate the user
-        const tryAuthenticateUser = async () => {
-            if (dbResult && dbResult.data) {
-                handleUpdateUser(dbResult.data);
-            } else if (dbResult) {
-                getFeedback("User not found or password incorrect.");
-            } else {
-                console.log("No user authenticated.");
-            }
-        };
-        tryAuthenticateUser();
-    }, [dbResult])
+        if (dbUser) {
+            handleUpdateUser(dbUser);
+            handleGetDbLibrary(dbUser._id);
+        }
+    }, [dbUser])
+
+    // observe for changes in the dbLibrary (which is set above), sychronise with LibraryContext
+    useEffect(() => {
+        if (dbLibrary) {
+            handleUpdateLibrary(dbLibrary);
+        }
+    }, [dbLibrary])
+
+    console.log(JSON.stringify(library));
 
     // internal states of component
     const [userCredentials, setUserCredentials] = useState({
@@ -82,7 +85,7 @@ export default function LoginForm(props) {
     const getFeedback = (message) => {
         console.log(message);
         setSubmitResult(message);
-        setTimeout(() => { setSubmitResult('') }, 4000);
+        setTimeout(() => { setSubmitResult('') }, 3000);
     }
 
     // copied directly from UserContext
@@ -93,20 +96,9 @@ export default function LoginForm(props) {
             getFeedback("Logged out.")
             return;
         }
-        try {
-            console.log(`querying database for user:\n ${email}`);
-            getFeedback('Logging in..')
-
-            // set an enpoint (query), and execute a database query :
-            setRequestConfig('get', `http://localhost:8080/api/users?email=${email}&password=${password}`);
-            // make the request - this is will return immediately, but the dbResult
-            // will be updated asynchronously, which will be observed by the useEffect above.
-            doExecute();
-
-        } catch (e) {
-            console.error(`Issue authenticating user: ${e}`);
-            getFeedback(`${e}`);
-        }
+        console.log(`querying database for user:\n ${email}`);
+        getFeedback('Attempting to sign in..')
+        handleGetDbUser(email, password);
     }
 
     // respond to a login request
@@ -120,18 +112,12 @@ export default function LoginForm(props) {
         }
     }
 
-    const handleLogout = () => {
-        setUserCredentials({ email: '', password: '' });
-        handleUpdateUser({});
-    }
-
     const handleCreateAccount = () => {
         navigate("/create")
     }
 
-    // on successful login, this is returned.
-    // the context should rely on the server to keep a record of who is logged in
-    if (user.name) {
+    // we use the existence of library._id as an indicator of sucessful login
+    if (library._id) {
         console.log(`'logged in state': user value is: ${JSON.stringify(user)}`);
         return (
             <Box>

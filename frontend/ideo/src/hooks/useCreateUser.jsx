@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-// provides a callback to create a library
-export default function useCreateLibrary() {
+// provides a callback to create a user
+export default function useCreateUser() {
 
-    console.log('useCreateLibrary hook mounted')
+    console.log('useCreateUser hook mounted')
 
     // keep an error state
     const [error, setError] = useState(null);
@@ -12,18 +12,23 @@ export default function useCreateLibrary() {
     // loading flag so consuming code can coordinate
     const [loading, setLoading] = useState(false);
 
-    // store library
-    const [library, setLibrary] = useState({});
+    // store the new user
+    const [user, setUser] = useState({});
 
-    // asynchronous library creation
-    const handleCreateLibrary = async (owner, name = "My Library") => {
+    // async callback to create a user
+    const handleCreateUser = async (name, email, password, theme = "Light") => {
         try {
             setError(null);
             setLoading(true)
             // wait for api response
             const response = await
-                axios.post("http://localhost:8080/api/libraries/create", { owner: owner, name: name })
-            setLibrary(response.data.data)
+                axios.post("http://localhost:8080/api/users/create", {
+                    name: name,
+                    email: email,
+                    password: password,
+                    theme: theme,
+                })
+            setUser(response.data.data);
             if (response.data.error) {
                 throw new Error(response.data.error)
             }
@@ -36,5 +41,5 @@ export default function useCreateLibrary() {
         }
     }
 
-    return [error, loading, library, handleCreateLibrary];
+    return [error, loading, user, handleCreateUser];
 }

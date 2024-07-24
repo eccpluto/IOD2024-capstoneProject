@@ -21,7 +21,7 @@ export const UserProvider = (props) => {
         console.log(`Setting UserContext: ${JSON.stringify(user)}`)
         user ?
             setUser({       // user provided (login)
-                id: user._id,
+                _id: user._id,
                 email: user.email,
                 name: user.name,
                 theme: user.theme,

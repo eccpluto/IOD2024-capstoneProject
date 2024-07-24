@@ -57,16 +57,18 @@ const augmentResources = (req, res) => {
     switch (req.query.augment) {
         case "push":
             console.log('pushing resource to library')
-            libraryModel.updateOne({ _id: req.params.id }, {
+            libraryModel.findOneAndUpdate({ _id: req.params.id }, {
                 $addToSet: { resources: req.body.resources }
             })
+                .populate('resources')
                 .then(data => res.send({ result: 200, data: data }))
                 .catch(err => res.send({ result: 500, error: err.message }));
             break;
         case "pull":
-            libraryModel.updateOne({ _id: req.params.id }, {
+            libraryModel.findOneAndUpdate({ _id: req.params.id }, {
                 $pull: { resources: req.body.resources }
             })
+                .populate(resources)
                 .then(data => res.send({ result: 200, data: data }))
                 .catch(err => res.send({ result: 500, error: err.message }));
             break;

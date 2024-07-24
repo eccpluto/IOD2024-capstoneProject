@@ -92,7 +92,7 @@ export default function ManageAccountForm(props) {
             theme: themeProps.value
         }
         console.log(`updating user information: ${JSON.stringify(updatedUser)}`);
-        setRequestConfig("put", `http://localhost:8080/api/users/${user.id}`, updatedUser);
+        setRequestConfig("put", `http://localhost:8080/api/users/${user._id}`, updatedUser);
         doExecute();
     }
 
@@ -113,9 +113,9 @@ export default function ManageAccountForm(props) {
     }
 
     const handleConfirmDeletion = () => {
-        console.log(`deleting user: ${user.id}`);
+        console.log(`deleting user: ${user._id}`);
         setShowDeleteDialog(false)
-        setRequestConfig("delete", `http://localhost:8080/api/users/${user.id}`);
+        setRequestConfig("delete", `http://localhost:8080/api/users/${user._id}`);
         doExecute();
         setDeletingAcount(true);
     }

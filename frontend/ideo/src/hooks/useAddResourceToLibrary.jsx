@@ -1,16 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-// provides a callback to add resources a to library
+// provides a callback to add a resource a to library, and the updated library
 export default function useAddResourceToLibrary() {
 
     console.log('useAddResourceToLibrary hook mounted')
 
+    // keep an error state
+    const [error, setError] = useState(null);
+
     // loading flag so consuming code can coordinate
     const [loading, setLoading] = useState(false);
 
+    // store library to return an updated object back to caller
+    const [library, setLibrary] = useState({});
+
     // asynchronous library creation
-    const handleAddResourcesToLibrary = async (resource, libraryId) => {
+    const handleAddResourceToLibrary = async (resource, libraryId) => {
         try {
             setLoading(true)
             // first we save the resouce to our resources collection 
@@ -29,6 +35,7 @@ export default function useAddResourceToLibrary() {
                 axios.put(`http://localhost:8080/api/libraries/${libraryId}/resources?augment=push`,
                     { resources: resourceResponse.data.data._id }
                 )
+            setLibrary(libraryResponse.data.data)
             console.log(`libraryResponse: ${JSON.stringify(libraryResponse)}`)
             if (libraryResponse.data.error) {
                 console.log('Error when updading library resources.')
@@ -43,5 +50,5 @@ export default function useAddResourceToLibrary() {
         }
     }
 
-    return [loading, handleAddResourcesToLibrary];
+    return [error, loading, library, handleAddResourceToLibrary];
 }

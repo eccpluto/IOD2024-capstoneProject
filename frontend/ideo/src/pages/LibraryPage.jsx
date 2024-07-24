@@ -6,6 +6,7 @@ import { useUserContext } from "../contexts/UserContext";
 import useMongoDb from "../hooks/useMongoDb";
 import { useEffect, useState } from "react";
 import useGetLibrary from "../hooks/useGetLibrary";
+import { useLibraryContext } from "../contexts/LibraryContext";
 
 export default function LibraryPage(props) {
 
@@ -16,9 +17,8 @@ export default function LibraryPage(props) {
     // the corresponding library via library.owner FK
     const { user } = useUserContext();
 
-    console.log(`user id: ${user.id}`)
-    const [loading, library] = useGetLibrary(user.id);
-    console.log(`loading: ${loading}`)
+    const { library } = useLibraryContext();
+    console.log(library);
 
 
     return (
@@ -46,7 +46,7 @@ export default function LibraryPage(props) {
 
                     {/* pass array of library resouces to browser */}
                     <Grid item xs={12}>
-                        {(!loading) && library && (<ResourceBrowser resourceArray={library.resources} browserVariant="library" />)}
+                        {(library) && library && (<ResourceBrowser resourceArray={library.resources} browserVariant="library" />)}
                     </Grid>
                 </Grid>
             </Box>

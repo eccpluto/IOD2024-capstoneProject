@@ -5,6 +5,7 @@ import useMongoDb from "../hooks/useMongoDb";
 import useFormInput from "../hooks/useFormInput";
 import { useNavigate } from "react-router-dom";
 import useCreateLibrary from "../hooks/useCreateLibrary";
+import useCreateUser from "../hooks/useCreateUser";
 
 // render this form to create accounts
 export default function CreateAccountForm(props) {
@@ -12,29 +13,33 @@ export default function CreateAccountForm(props) {
     // for cancelling creation of account
     const navigate = useNavigate();
 
+    // create a user via a callback to this hook, we don't login for now
+    // so there is no setting contexts
+    const [errorUser, loadingUser, user, handleCreateUser] = useCreateUser();
+
     // will need to post a new user document on creation
-    const [dbResult, setRequestConfig, doExecute] = useMongoDb();
+    // const [dbResult, setRequestConfig, doExecute] = useMongoDb();
 
-    // will need to create a default library
-    const [loading, handleCreateLibrary] = useCreateLibrary();
+    // will need to create a default library too
+    const [errorLibrary, loadingLibrary, library, handleCreateLibrary] = useCreateLibrary();
 
-    // observe for a successful response, which will nav to LoginPage
+    // when a new user is created, create and assign library
+    // the reason this is null event though we set it to {} ios because the db response
+    // will be null for the field containing the user data
     useEffect(() => {
-        const onDbResponse = async () => {
-            console.log(`checking result: ${JSON.stringify(dbResult)}`)
-            // checking http response.result
-            if (dbResult && dbResult.result == "200") {
-                // acount created, create a library for this user
-                handleCreateLibrary(dbResult.data._id);
-                // we should also render a different UI state
-                getFeedback('Account successfully created. Returning to login page.')
-                setTimeout(() => navigate("/login"), 4000);
-            } else if (dbResult && dbResult.result == "500") {
-                getFeedback(dbResult.error);
-            }
-        };
-        onDbResponse();
-    }, [dbResult]);
+        if (user) {
+            handleCreateLibrary(user._id);
+        }
+    }, [user])
+
+
+    // once a new library is created, we know we are finished
+    useEffect(() => {
+        if (library && library._id) {
+            getFeedback('Account successfully created. Returning to login page.')
+            setTimeout(() => navigate("/login"), 4000);
+        }
+    }, [library])
 
 
     const [nameProps, nameReset] = useFormInput('');
@@ -66,15 +71,12 @@ export default function CreateAccountForm(props) {
 
     const handleAddUser = () => {
         // server will handle uniqueness of users
-        let newUser = {
-            name: nameProps.value,
-            email: emailProps.value,
-            password: passwordProps.value,
-            theme: themeProps.value
-        }
-        console.log(`candidate for newUser is: ${JSON.stringify(newUser)}`);
-        setRequestConfig("post", `http://localhost:8080/api/users/create`, newUser);
-        doExecute();
+        handleCreateUser(
+            nameProps.value,
+            emailProps.value,
+            passwordProps.value,
+            themeProps.value
+        )
     }
 
     // when user tries to submit values for a new account
@@ -92,7 +94,7 @@ export default function CreateAccountForm(props) {
 
     return (
         <Container component="main" maxWidth="xs">
-            {(loading && ("loading"))}
+            {((loadingUser || loadingLibrary) && ("loading"))}
             <Box sx={{
                 marginTop: 8,
                 display: 'flex',
