@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useMongoDb from "../hooks/useMongoDb";
 import useFormInput from "../hooks/useFormInput";
 import { useNavigate } from "react-router-dom";
+import useCreateLibrary from "../hooks/useCreateLibrary";
 
 // render this form to create accounts
 export default function CreateAccountForm(props) {
@@ -14,12 +15,18 @@ export default function CreateAccountForm(props) {
     // will need to post a new user document on creation
     const [dbResult, setRequestConfig, doExecute] = useMongoDb();
 
+    // will need to create a default library
+    const [loading, handleCreateLibrary] = useCreateLibrary();
+
     // observe for a successful response, which will nav to LoginPage
     useEffect(() => {
         const onDbResponse = async () => {
             console.log(`checking result: ${JSON.stringify(dbResult)}`)
             // checking http response.result
             if (dbResult && dbResult.result == "200") {
+                console.log()
+                // acount created, create a library for this user
+                handleCreateLibrary(dbResult.data._id);
                 // we should also render a different UI state
                 getFeedback('Account successfully created. Returning to login page.')
                 setTimeout(() => navigate("/login"), 4000);
@@ -84,6 +91,7 @@ export default function CreateAccountForm(props) {
 
     return (
         <Container component="main" maxWidth="xs">
+            {(loading && ("loading"))}
             <Box sx={{
                 marginTop: 8,
                 display: 'flex',
@@ -166,7 +174,7 @@ export default function CreateAccountForm(props) {
                         type="button"
                         fullWidth
                         variant="contained"
-                        onClick={handleCancel}
+                        onClick={(handleCancel)}
                         sx={{ mt: 1, mb: 2 }}
                     >
                         Cancel
