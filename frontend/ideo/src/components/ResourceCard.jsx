@@ -6,23 +6,25 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { IFrameModal } from "./common";
-import useMongoDb from "../hooks/useMongoDb";
+import { useUserContext } from "../contexts/UserContext";
 
 // display a resource
 // this could be from a search result(s), or from locally saved resources
 export default function ResourceCard(props) {
 
-    const [expanded, setExpanded] = useState(false);
+    // for determining if authenticated session functionality should be enabled
+    // i.e. add to library
+    const { user } = useUserContext();
+
+    // for determining context of card
+    const { resource, resourceType, cardVariant, callbackAddResourcesToLibrary } = props;
+
+    // iframe viewable state
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // hacky ensure initial population of library from db occurs once
-    const [initialRender, setInitialRender] = useState(true);
+    // console.log(props)
 
-    const resource = props.resource;
-    const resourceType = props.resourceType;
-    const userId = props.userId;
-    
-    // unpayway provides some html-formatted strings
+    // unpaywall provides some html-formatted strings, we need these in plain text
     const stripHTMLTags = (html) => {
         let temp = document.createElement('div');
         temp.innerHTML = html;
@@ -33,20 +35,17 @@ export default function ResourceCard(props) {
         setIsModalOpen(false);
     }
 
-    const handleOpenFile = () => {
+    const handleOpenLinkModal = () => {
         setIsModalOpen(true);
     }
 
-    const handlePushToLibrary = () => {
-
+    const handleAddResourcesToLibrary = () => {
+        callbackAddResourcesToLibrary(resource);
     }
-
-    // console.log(resource);
 
     return (
         <Paper
             elevation={5}
-        // sx={onclick=alert("hello there")}
         >
             <Box
                 padding={1}
@@ -66,7 +65,7 @@ export default function ResourceCard(props) {
                             align="left" padding={1} sx={{ overflow: "hidden" }}
                         >
                             {/* {resourceType} */}
-                            {resource.title}
+                            {resource.name}
                         </Typography>
                     </Box>
 
@@ -78,12 +77,15 @@ export default function ResourceCard(props) {
                             href={resource.url} target="_blank">
                             <OpenInNewIcon />
                         </IconButton>
-                        <IconButton onClick={handleOpenFile}>
+                        <IconButton onClick={handleOpenLinkModal}>
                             <FileOpenIcon />
                         </IconButton>
-                        <IconButton onClick={handlePushToLibrary}>
-                            <AddCircleIcon />
-                        </IconButton>
+                        {(user.name && (cardVariant == "unpaywall")) && (
+                            <IconButton
+                                onClick={handleAddResourcesToLibrary}>
+                                <AddCircleIcon />
+                            </IconButton>
+                        )}
 
                     </Box>
 
@@ -111,7 +113,7 @@ export default function ResourceCard(props) {
                     </AccordionDetails>
                 </Accordion>
             </Box>
-            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.url} name={resource.title} />
+            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.url} name={resource.name} />
         </Paper >
     )
 }

@@ -3,29 +3,27 @@ import ResourceCard from "./ResourceCard";
 import useUnpaywallData from "../hooks/useUnpaywallData";
 import useMongoDb from "../hooks/useMongoDb";
 import { useEffect, useState } from "react";
+import useGetLibrary from "../hooks/useGetLibrary";
+import useAddResourceToLibrary from "../hooks/useAddResourceToLibrary";
+import { useUserContext } from "../contexts/UserContext";
 
 // display resources in a grid
 export default function ResourceBrowser(props) {
 
-  // destructure props, also indicates allowable props
-  const { sourceTarget, resourceArray } = props;
+  // destructure props, data array to display and a variant property
+  const { resourceArray, browserVariant } = props;
 
-  // const [initialRender, setInitialRender] = useState(true);
+  // make available the ability to add resources to a library, callback referenced in each card
+  const { user } = useUserContext();
+  // console.log(user);
+  const [loading, library] = useGetLibrary(user.id);
+  // console.log(library);
+  const [processing, handleAddResourcesToLibrary] = useAddResourceToLibrary();
 
-  // link with database
-  // const [dbResult, setRequestConfig, doExecute] = useMongoDb();
-
-  // useEffect(() => {
-  //   if (initialRender) {
-  //     // request associated library for user
-  //     console.log('in ResourceBrowser use effect');
-  //     setRequestConfig("get", `http://localhost:8080/api/libraries/${libraryOwner}`);
-  //   }
-  // }, [dbResult])
-
-  // const handlePushToLibrary = () => {
-  //   console.log(dbResult);
-  // }
+  const callbackAddResourcesToLibrary = (resource) => {
+    // console.log(resource);
+    handleAddResourcesToLibrary(resource, library._id);
+  }
 
   return (
     <Container>
@@ -38,13 +36,13 @@ export default function ResourceBrowser(props) {
         justifyContent="center"
         alignItems="flex-end"
       >
-        {/* if we have data, we map these to cards */}
+        {/* {console.log(resourceArray)} */}
         {resourceArray && resourceArray.map((resource, index) => {
           return (
             <Grid item key={index}>
-              <ResourceCard resource={resource} resourceType="article"
-                // handlePushToLibrary={handlePushToLibrary}
-              />
+              {/* {console.log(resource)} */}
+              <ResourceCard resource={resource} resourceType="article" cardVariant={browserVariant}
+                callbackAddResourcesToLibrary={callbackAddResourcesToLibrary} />
             </Grid>
           )
         })}

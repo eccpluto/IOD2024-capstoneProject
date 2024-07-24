@@ -15,6 +15,7 @@ export default function LoginForm(props) {
     // if a user is logged in / authenticated in this case
     const { user, handleUpdateUser } = useUserContext();
 
+
     // Authentication will be handled by simply updating the user
     // state which is stored in the UserContext instance.
     // Authentication depends on the user being a valid account,
@@ -134,10 +135,10 @@ export default function LoginForm(props) {
         console.log(`'logged in state': user value is: ${JSON.stringify(user)}`);
         return (
             <Box>
-                <p>Welcome {user.name}!</p>
+                <Typography>Welcome {user.name}!</Typography>
                 {/* {submitResult} */}
                 <Box>
-                    <button onClick={handleLogout}>Log Out</button>
+                    {/* <button onClick={handleLogout}>Log Out</button> */}
                 </Box>
             </Box>
         )

@@ -65,7 +65,7 @@ export default function PersistentSearchDrawer(props) {
             </DrawerHeader>
             <Divider />
             {/* send result here to display */}
-            <ResourceBrowser resourceArray={unpaywallData} handlePushToLibrary={handlePushToLibrary} />
+            <ResourceBrowser resourceArray={unpaywallData} browserVariant="unpaywall" />
         </Drawer>
     );
 }

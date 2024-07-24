@@ -19,8 +19,8 @@ export default function LibraryPage(props) {
     console.log(`user id: ${user.id}`)
     const [loading, library] = useGetLibrary(user.id);
     console.log(`loading: ${loading}`)
-    
-    
+
+
     return (
         // all pages are in a container
         <Container maxWidth="xl" sx={{ height: '100vh' }}>
@@ -44,9 +44,9 @@ export default function LibraryPage(props) {
                         <Header title="Library" />
                     </Grid>
 
-                    {/* resource browser, but populated with library resources */}
+                    {/* pass array of library resouces to browser */}
                     <Grid item xs={12}>
-                        {library && (<ResourceBrowser libraryId={library._id} resourceArray={library.resources} />)}
+                        {(!loading) && library && (<ResourceBrowser resourceArray={library.resources} browserVariant="library" />)}
                     </Grid>
                 </Grid>
             </Box>

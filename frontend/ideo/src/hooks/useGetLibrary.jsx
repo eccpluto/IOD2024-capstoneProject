@@ -13,13 +13,16 @@ export default function useGetLibrary(owner) {
     const [library, setLibrary] = useState({});
 
     useEffect(() => {
-        const getLibrary = async () => {
+        const getLibrary = async (owner) => {
+            if(owner)
             try {
                 setLoading(true)
                 // wait for api response
+                console.log(owner);
                 const response = await
                     axios.get("http://localhost:8080/api/libraries/", { params: { owner: owner, } })
-                setLibrary(response.data)
+                    // console.log(response.data.data)
+                setLibrary(response.data.data)
                 if (response.data.error) {
                     throw new Error(response.data.error)
                 }
@@ -31,8 +34,8 @@ export default function useGetLibrary(owner) {
                 setLoading(false);
             }
         }
-        getLibrary();
-    }, [])  // don't observe anything as we just want this hook to run once
+        getLibrary(owner);
+    }, [owner])  // observe this as users may change in a session
 
     return [loading, library];
 }

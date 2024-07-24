@@ -24,7 +24,7 @@ export default function useUnpaywallData() {
         const serialisedData = data.map((element) => {
             // console.log(element);
             return {
-                title: element.response.title,
+                name: element.response.title,
                 url: element.response.doi_url,
                 abstract: element.snippet,
                 pdf_link: element.response.best_oa_location.url_for_pdf

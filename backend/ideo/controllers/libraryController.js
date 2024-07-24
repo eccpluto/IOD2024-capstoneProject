@@ -19,7 +19,7 @@ const getLibraryById = (req, res) => {
 
 const getLibraries = (req, res) => {
     console.log(JSON.stringify(req.params))
-    console.log(`Getting Libraries, params: ${JSON.stringify(req.query)}.`);
+    console.log(`Getting Libraries, params: ${JSON.stringify(req.params)}.`);
     if (req.query.owner) {
         libraryModel.findOne({ owner: req.query.owner })
             .populate('resources')
@@ -35,9 +35,10 @@ const getLibraries = (req, res) => {
 
 const updateLibraryById = (req, res) => {
     console.log(`Updating Library id: ${req.params.id}`);
-    libraryModel.findByIdAndUpdate(req.params.id, req.body, {
-        new: true
-    })
+    libraryModel.findByIdAndUpdate(req.params.id, req.body,
+        { new: true },
+
+    )
         .then(data => res.send({ result: 200, data: data }))
         .catch(err => res.send({ result: 500, error: err.message }));
 }
@@ -50,6 +51,29 @@ const deleteLibraryById = (req, res) => {
         .catch(err => res.send({ result: 500, error: err.message }));
 }
 
+const augmentResources = (req, res) => {
+    console.log(`augmenting resources for library: ${req.params.id}`);
+    console.log(req.params)
+    switch (req.query.augment) {
+        case "push":
+            console.log('pushing resource to library')
+            libraryModel.updateOne({ _id: req.params.id }, {
+                $addToSet: { resources: req.body.resources }
+            })
+                .then(data => res.send({ result: 200, data: data }))
+                .catch(err => res.send({ result: 500, error: err.message }));
+            break;
+        case "pull":
+            libraryModel.updateOne({ _id: req.params.id }, {
+                $pull: { resources: req.body.resources }
+            })
+                .then(data => res.send({ result: 200, data: data }))
+                .catch(err => res.send({ result: 500, error: err.message }));
+            break;
+    }
+}
+
+
 
 module.exports = {
     createLibrary,
@@ -57,4 +81,5 @@ module.exports = {
     getLibraries,
     updateLibraryById,
     deleteLibraryById,
+    augmentResources,
 }
