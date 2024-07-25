@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, CircularProgress, Container, Grid } from "@mui/material";
 import ResourceCard from "./ResourceCard";
 import useUnpaywallData from "../hooks/useUnpaywallData";
 import useMongoDb from "../hooks/useMongoDb";
@@ -12,7 +12,7 @@ import { useLibraryContext } from "../contexts/LibraryContext";
 export default function ResourceBrowser(props) {
 
   // destructure props, data array to display and a variant property
-  const { resourceArray, browserVariant } = props;
+  const { resourceArray, resourceLocation, loading } = props;
 
   // make available the ability to add resources to a library, callback referenced in each card
   // const { user } = useUserContext();
@@ -28,6 +28,13 @@ export default function ResourceBrowser(props) {
     // console.log(resource);
     handleAddResourceToLibrary(resource, library._id);
   }
+
+  // observe errors
+  useEffect(() => {
+    if(errorLibrary) {
+      alert(errorLibrary);
+    }
+  }, [errorLibrary])
 
   // observe resource changes
   useEffect(() => {
@@ -48,12 +55,13 @@ export default function ResourceBrowser(props) {
         justifyContent="center"
         alignItems="flex-end"
       >
+        {loading && (<CircularProgress/>)}
         {/* {console.log(resourceArray)} */}
-        {resourceArray && resourceArray.map((resource, index) => {
+        {!loading && resourceArray && resourceArray.map((resource, index) => {
           return (
             <Grid item key={index}>
               {/* {console.log(resource)} */}
-              <ResourceCard resource={resource} resourceType="article" cardVariant={browserVariant}
+              <ResourceCard resource={resource} resourceType="article" resourceLocation={resourceLocation}
                 callbackAddResourceToLibrary={callbackAddResourceToLibrary} />
             </Grid>
           )

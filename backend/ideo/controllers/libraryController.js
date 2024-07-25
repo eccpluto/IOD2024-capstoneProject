@@ -13,6 +13,7 @@ const createLibrary = (req, res) => {
 const getLibraryById = (req, res) => {
     console.log(`Getting Library id: ${req.params.id}`);
     libraryModel.findById(req.params.id)
+        .populate('resources')
         .then(data => res.send({ result: 200, data: data }))
         .catch(err => res.send({ result: 500, error: err.message }));
 };
@@ -75,6 +76,25 @@ const augmentResources = (req, res) => {
     }
 }
 
+const searchResources = (req, res) => {
+    console.log(`searching resources for library: ${req.params.id}`);
+    console.log(`search term: ${req.query.search}`)
+    // we use a regex to match for populated reference docs
+    const regex = new RegExp(req.query.search, "i");
+    // console.log(regex);
+    // get library resources
+    libraryModel.findOne({ _id: req.params.id })
+        .populate({
+            path: 'resources',
+            // filter the resources by the search query - only resource name for now
+            match: {
+                name : regex
+            },
+        })
+        .then(data => res.send({ result: 200, data: data }))
+        .catch(err => res.send({ result: 500, error: err.message }))
+}
+
 
 
 module.exports = {
@@ -84,4 +104,5 @@ module.exports = {
     updateLibraryById,
     deleteLibraryById,
     augmentResources,
+    searchResources,
 }

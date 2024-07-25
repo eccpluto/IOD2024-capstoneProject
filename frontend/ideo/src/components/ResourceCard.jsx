@@ -17,12 +17,12 @@ export default function ResourceCard(props) {
     const { user } = useUserContext();
 
     // for determining context of card
-    const { resource, resourceType, cardVariant, callbackAddResourceToLibrary } = props;
+    const { resource, resourceType, resourceLocation, callbackAddResourceToLibrary } = props;
 
     // iframe viewable state
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    console.log(resource.name)
+    // console.log(resource.name)
 
     // unpaywall provides some html-formatted strings, we need these in plain text
     const stripHTMLTags = (html) => {
@@ -80,7 +80,7 @@ export default function ResourceCard(props) {
                         <IconButton onClick={handleOpenLinkModal}>
                             <FileOpenIcon />
                         </IconButton>
-                        {(user.name && (cardVariant == "unpaywall")) && (
+                        {(user.name && (resourceLocation == "online")) && (
                             <IconButton
                                 onClick={handleAddResourceToLibrary}>
                                 <AddCircleIcon />

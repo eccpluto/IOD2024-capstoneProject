@@ -43,7 +43,7 @@ export default function useAddResourceToLibrary() {
             }
 
         } catch (error) {
-            console.log(`Error adding resource to library: ${error.message}`)
+            setError(`Error adding resource to library: ${error.message}`)
 
         } finally {
             setLoading(false);

@@ -41,5 +41,9 @@ Router.put("/:id/resources", (req, res) => {
     libraryController.augmentResources(req, res);
 })
 
+Router.get("/:id/resources", (req, res) => {
+    libraryController.searchResources(req, res);
+})
+
 
 module.exports = Router;

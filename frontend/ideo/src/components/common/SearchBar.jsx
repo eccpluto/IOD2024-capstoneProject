@@ -1,21 +1,42 @@
-import { FormControl, FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, TextField } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, IconButton, Popover, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search'
 import { useState } from "react";
+import { useUserContext } from "../../contexts/UserContext";
 
 export default function SearchBar(props) {
     const [query, setQuery] = useState('');
     const [searchTaget, setSearchTarget] = useState("online");
     const { handleSubmitSearch } = props;
 
+    // anchor location for popup message
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    // for checking if the search should give access to local resources
+    const { user } = useUserContext();
+
     const handlePreSubmit = (e) => {
         e.preventDefault();
         console.log('submitting query.')
+        // alert(searchTaget)
         handleSubmitSearch(query, searchTaget);
     }
 
     const handleSearchTargetChange = (e) => {
         setSearchTarget(e.target.value);
     }
+
+    // popup handlers for when local search is disabled
+    const handlePopoverOpen = (e) => {
+        console.log('handlingPopoverOpen');
+        setAnchorEl(e.currentTarget);
+    }
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    }
+
+    // quick cast the open state of the popover
+    const open = Boolean(anchorEl);
 
     return (
         // <form onSubmit={(e) => handleSubmit(e)}>
@@ -28,9 +49,9 @@ export default function SearchBar(props) {
                 variant="outlined"
                 placeholder="Search..."
                 size="small"
-                sx={{width: 360}}
-                />
-                
+                sx={{ width: 360 }}
+            />
+
             <IconButton
                 type="submit"
                 aria-label="search">
@@ -49,8 +70,34 @@ export default function SearchBar(props) {
                     onChange={handleSearchTargetChange} >
                     <FormControlLabel value="online"
                         control={<Radio />} label="Online" />
-                    <FormControlLabel value="library"
-                        control={<Radio />} label="Library" />
+                    {user._id ? <FormControlLabel value="local"
+                        control={<Radio />} label="Local" />
+                        : <FormControlLabel value="local"
+                            control={<Radio />} label="Local" disabled
+                            onMouseEnter={handlePopoverOpen}
+                            onMouseLeave={handlePopoverClose}
+                        />}
+                    <Popover
+                        id="local-radio-popover"
+                        sx={{
+                            pointerEvents: 'none'
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right'
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                    >
+                        <Typography sx={{ p: 1 }}>Login to enable.</Typography>
+
+                    </Popover>
                 </RadioGroup>
             </FormControl>
         </form>
