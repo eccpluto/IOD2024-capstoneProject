@@ -1,0 +1,570 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Ideo API",
+        "description": "The API for the Ideo app.",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "localhost:3000"
+        }
+    ],
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Ideo",
+            "description": "API for accessing Ideo backend."
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/libraries/": {
+            "get": {
+                "tags": [
+                    "libraries"
+                ],
+                "summary": "Get all libraries",
+                "responses": {
+                    "200": {
+                        "description": "Successfully returned all available libraries"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/libraries/create": {
+            "post": {
+                "tags": [
+                    "libraries"
+                ],
+                "summary": "Create a new library",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "query",
+                        "default": "My Library",
+                        "description": "Name of the library"
+                    },
+                    {
+                        "name": "resources",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId of a resource to be added. Usually added after library created"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created the library"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/libraries/:id": {
+            "get": {
+                "tags": [
+                    "libraries"
+                ],
+                "summary": "Get a library by Id",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the library"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully returned the requested library"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "libraries"
+                ],
+                "summary": "Update a library by Id",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the library"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "body",
+                        "description": "The new name to update the target library to"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully returned the updated library"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/libraries/delete": {
+            "delete": {
+                "tags": [
+                    "libraries"
+                ],
+                "summary": "Delete a library by Id",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the library"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the requested library"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/libraries/:id/resources": {
+            "put": {
+                "tags": [
+                    "libraries",
+                    "references",
+                    "subdocuments",
+                    "resources"
+                ],
+                "summary": "Augment the resource array of a particular library",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the library"
+                    },
+                    {
+                        "name": "resourceId",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the resource to be added to the library"
+                    },
+                    {
+                        "name": "augment",
+                        "type": "string",
+                        "in": "query",
+                        "description": "Instruction on what to do with the resourceId, options are 'push' to add, or 'pull' to remove"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully augmented the requested library' resources"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "libraries",
+                    "references",
+                    "subdocuments",
+                    "resources"
+                ],
+                "summary": "Find a resource in the given library by string (case-insensitive)",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the library"
+                    },
+                    {
+                        "name": "search",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The (sub-)string that will search by querying resource names"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully performed the search and delivered (possibly no) results"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/resources/create": {
+            "post": {
+                "tags": [
+                    "resources",
+                    "new data"
+                ],
+                "summary": "Create new resource document with the supplied data",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The name of the resource"
+                    },
+                    {
+                        "name": "url",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The online URL or URI which the resource can be linked to"
+                    },
+                    {
+                        "name": "abstract",
+                        "type": "string",
+                        "in": "query",
+                        "description": "A short summary of the resource"
+                    },
+                    {
+                        "name": "pdf_link",
+                        "type": "string",
+                        "in": "query",
+                        "default": "null",
+                        "description": "A link to a pdf file (if possible)"
+                    },
+                    {
+                        "name": "relation",
+                        "type": "string",
+                        "in": "query",
+                        "description": "An ObjectId that indicated some relationship with another resource"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created the resource and returned the new object"
+                    },
+                    "202": {
+                        "description": "A duplicate was found in the referenced collection, but the resource reference was still added"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/resources/:id": {
+            "get": {
+                "tags": [
+                    "resources"
+                ],
+                "summary": "Find a resouce by Id",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the resource"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully found the resource and returned it"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "resources"
+                ],
+                "summary": "Update the resource",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The name of the resource"
+                    },
+                    {
+                        "name": "url",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The online URL or URI which the resource can be linked to"
+                    },
+                    {
+                        "name": "abstract",
+                        "type": "string",
+                        "in": "query",
+                        "description": "A short summary of the resource"
+                    },
+                    {
+                        "name": "pdf_link",
+                        "type": "string",
+                        "in": "query",
+                        "default": "null",
+                        "description": "A link to a pdf file (if possible)"
+                    },
+                    {
+                        "name": "relation",
+                        "type": "string",
+                        "in": "query",
+                        "description": "An ObjectId that indicated some relationship with another resource"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created the resource and returned the new object"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "resources"
+                ],
+                "summary": "Find a resouce by Id and delete it",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId uniquely identifying the resource"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the resource and returned it"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/users/create": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create a new user",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The name of the user"
+                    },
+                    {
+                        "name": "email",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The users email"
+                    },
+                    {
+                        "name": "password",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The users password"
+                    },
+                    {
+                        "name": "theme",
+                        "type": "string",
+                        "in": "query",
+                        "default": "Light",
+                        "description": "Theme setting, other options are 'Dark', and 'Light'"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created the user and returned the new object"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "Successfully returned all users"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/users/:id": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a user by Id",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The Object that uniquely identifies the user"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully found the user and returned the user"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "users",
+                    "account management"
+                ],
+                "summary": "Update a user details",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The name of the user"
+                    },
+                    {
+                        "name": "email",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The users email"
+                    },
+                    {
+                        "name": "password",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The users password"
+                    },
+                    {
+                        "name": "theme",
+                        "type": "string",
+                        "in": "query",
+                        "default": "Light",
+                        "description": "Theme setting, other options are 'Dark', and 'Light'"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated the user and returned updated user object"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "users",
+                    "account management"
+                ],
+                "summary": "delte a user by id",
+                "parameters": [
+                    {
+                        "name": "_id",
+                        "type": "string",
+                        "in": "query",
+                        "description": "The ObjectId that uniquely identifies the user"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the user"
+                    },
+                    "404": {
+                        "description": "URL not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        }
+    }
+}
