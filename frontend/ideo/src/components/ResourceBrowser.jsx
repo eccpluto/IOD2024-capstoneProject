@@ -41,13 +41,13 @@ export default function ResourceBrowser(props) {
 
   // observe errors
   useEffect(() => {
-    if(errorAddToLibrary) {
+    if (errorAddToLibrary) {
       alert(errorAddToLibrary);
     }
   }, [errorAddToLibrary])
 
   useEffect(() => {
-    if(errorRemoveFromLibrary) {
+    if (errorRemoveFromLibrary) {
       alert(errorRemoveFromLibrary);
     }
   }, [errorRemoveFromLibrary])
@@ -80,7 +80,10 @@ export default function ResourceBrowser(props) {
         justifyContent="center"
         alignItems="flex-end"
       >
-        {loading && (<CircularProgress/>)}
+        {loading && (
+          <Box padding={4}>
+            <CircularProgress />
+          </Box>)}
         {/* {console.log(resourceArray)} */}
         {!loading && resourceArray && resourceArray.map((resource, index) => {
           return (
@@ -89,7 +92,7 @@ export default function ResourceBrowser(props) {
               <ResourceCard resource={resource} resourceType="article" resourceLocation={resourceLocation}
                 callbackAddResourceToLibrary={callbackAddResourceToLibrary}
                 callbackRemoveResourceFromLibrary={callbackRemoveResourceFromLibrary}
-                />
+              />
             </Grid>
           )
         })}

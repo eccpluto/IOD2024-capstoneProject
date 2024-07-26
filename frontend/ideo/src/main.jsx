@@ -11,10 +11,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {/* Routes should have access to UserContext for user-specific data access */}
     <UserProvider>
       <LibraryProvider>
-        {/* BrowserRouter allows for CS routing, and is utilised by Routes inside the router */}
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+          {/* BrowserRouter allows for CS routing, and is utilised by Routes inside the router */}
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
       </LibraryProvider>
     </UserProvider>
   </React.StrictMode>,

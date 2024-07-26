@@ -1,13 +1,19 @@
-import { AppBar, Box, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography, useTheme } from "@mui/material";
 import { AccountCircle, Menu as MenuIcon } from "@mui/icons-material"
 import React, { useReducer, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 import SearchIcon from '@mui/icons-material/Search'
 import PersistentSearchDrawer from "../PersistentSearchDrawer";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 // A bar at the top of the viewport to allow the user to navigate the app
 export default function NavigationBar(props) {
+
+    const { toggleTheme } = props;
+
+    const theme = useTheme();
 
     const { user, handleUpdateUser } = useUserContext();
 
@@ -118,6 +124,31 @@ export default function NavigationBar(props) {
                             <NavLink to={"/logout"}>Logout</NavLink>
                         </MenuItem>
                     </Menu>
+                    <Box sx={{ display: "flex"}}>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="#"
+                            sx={{
+                                // mr: 2,
+                                p: 2,
+                                display: { xs: 'flex', md: 'flex' },
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                flexGrow: 1,
+                            }}
+                        >
+                            Ideo
+                        </Typography>
+                        <IconButton sx={{ ml: 1 }} onClick={toggleTheme} color="inherit">
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                        </IconButton>
+
+                    </Box>
                     {/* Seach button */}
                     <Box sx={{
                         width: "100vw",

@@ -29,7 +29,7 @@ export default function LibraryPage(props) {
             <Box sx={{
                 my: 4,
                 p: 2,
-                bgcolor: theme.palette.primary.main,
+                // bgcolor: theme.palette.primary.main,
                 borderRadius: 4,
             }}>
                 {/* components are placed in the grid system */}
