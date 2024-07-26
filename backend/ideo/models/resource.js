@@ -7,6 +7,7 @@ const resourceSchema = new Schema({
     name: { type: Types.String, trim: true, required: true, unique: true },
     url: { type: Types.String, trim: true, required: true }, // resources could point to same thing(?)
     abstract: { type: Types.String, trim: true, required: true }, // populate from abstract / snippet
+    pdf_link: { type: Types.String, trim: true, required: false , default: null},
     relations: [{ type: Types.ObjectId, ref: "resource" }], // relations are defined between resources
 })
 

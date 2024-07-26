@@ -26,11 +26,14 @@ export default function useAddResourceToLibrary() {
                 axios.post("http://localhost:8080/api/resources/create", resource)
             console.log(`resourceResponse: ${JSON.stringify(resourceResponse)}`)
             if (resourceResponse.data.error) {
+                // if there is a duplicate resource, this is likely expected 
+                // as resources can be shared between libraries
                 console.log('Error when saving new resource.')
                 throw new Error(resourceResponse.data.error)
             }
 
             // then we need to add the resource to our library
+            console.log(resourceResponse.data.data._id);
             const libraryResponse = await
                 axios.put(`http://localhost:8080/api/libraries/${libraryId}/resources?augment=push`,
                     { resources: resourceResponse.data.data._id }

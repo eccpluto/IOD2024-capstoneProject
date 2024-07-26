@@ -16,6 +16,7 @@ export default function LibraryPage(props) {
     // get the user id, this value will allow us to get
     // the corresponding library via library.owner FK
     const { user } = useUserContext();
+    console.log(user)
 
     const { library } = useLibraryContext();
     console.log(library);
@@ -46,7 +47,7 @@ export default function LibraryPage(props) {
 
                     {/* pass array of library resouces to browser */}
                     <Grid item xs={12}>
-                        {(library) && library && (<ResourceBrowser resourceArray={library.resources} browserVariant="library" />)}
+                        {(library) && library && (<ResourceBrowser resourceArray={library.resources} resourceLocation="local" />)}
                     </Grid>
                 </Grid>
             </Box>

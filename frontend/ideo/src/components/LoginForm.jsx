@@ -21,6 +21,7 @@ export default function LoginForm(props) {
      */
     const [errorDbUser, loadingDbUser, dbUser, handleGetDbUser] = useGetUser();
     const { user, handleUpdateUser } = useUserContext();
+    // console.log(user);
 
     /**
      * we also want to synchronise out LibraryContext, which depends on the
@@ -32,6 +33,7 @@ export default function LoginForm(props) {
     // observe for changes in the dbUser, which we can then synchronise our UserContext with.
     useEffect(() => {
         if (dbUser) {
+            // console.log(user)
             handleUpdateUser(dbUser);
             handleGetDbLibrary(dbUser._id);
         }
@@ -44,6 +46,7 @@ export default function LoginForm(props) {
         }
     }, [dbLibrary])
 
+    console.log(JSON.stringify(user));
     console.log(JSON.stringify(library));
 
     // internal states of component
@@ -119,6 +122,7 @@ export default function LoginForm(props) {
     // we use the existence of library._id as an indicator of sucessful login
     if (library._id) {
         console.log(`'logged in state': user value is: ${JSON.stringify(user)}`);
+        console.log(`'logged in state': library value is: ${JSON.stringify(library)}`);
         return (
             <Box>
                 <Typography>Welcome {user.name}!</Typography>

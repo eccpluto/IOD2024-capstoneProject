@@ -28,7 +28,7 @@ export default function PersistentSearchDrawer(props) {
     const theme = useTheme();
     const open = props.open;
     const handleDrawerClose = props.handleDrawerClose
-    const handlePushToLibrary = props.handlePushToLibrary
+    // const handlePushToLibrary = props.handlePushToLibrary
 
     // for whether the ResourceBrowser is displaying local or online resources
     const [resourceLocation, setResourceLocation] = useState("online");
@@ -79,6 +79,7 @@ export default function PersistentSearchDrawer(props) {
         return (loadingSearchResources || loadingUnpaywallData);
     }
 
+    // note we don't expect this to contain enything of we are searchin online
     console.log(searchResources);
     return (
         <Drawer

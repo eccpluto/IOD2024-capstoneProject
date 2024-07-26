@@ -58,19 +58,29 @@ const augmentResources = (req, res) => {
     switch (req.query.augment) {
         case "push":
             console.log('pushing resource to library')
-            libraryModel.findOneAndUpdate({ _id: req.params.id }, {
-                $addToSet: { resources: req.body.resources }
-            })
+            libraryModel.findOneAndUpdate({ _id: req.params.id },
+                {
+                    $addToSet: { resources: req.body.resources }
+                }, { new: true })
                 .populate('resources')
-                .then(data => res.send({ result: 200, data: data }))
+                .then(data => {
+                    console.log(data);
+                    res.send({ result: 200, data: data })
+                }
+                )
                 .catch(err => res.send({ result: 500, error: err.message }));
             break;
         case "pull":
-            libraryModel.findOneAndUpdate({ _id: req.params.id }, {
-                $pull: { resources: req.body.resources }
-            })
-                .populate(resources)
-                .then(data => res.send({ result: 200, data: data }))
+            console.log(`pulling resource ( ${req.query.resourceId} ) from library`)
+            libraryModel.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { resources: req.query.resourceId } },
+                { new: true })
+                .populate('resources')
+                .then(data => {
+                    res.send({ result: 200, data: data })
+                    console.log(data)
+                })
                 .catch(err => res.send({ result: 500, error: err.message }));
             break;
     }
@@ -88,7 +98,7 @@ const searchResources = (req, res) => {
             path: 'resources',
             // filter the resources by the search query - only resource name for now
             match: {
-                name : regex
+                name: regex
             },
         })
         .then(data => res.send({ result: 200, data: data }))

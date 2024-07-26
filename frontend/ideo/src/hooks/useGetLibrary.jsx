@@ -16,6 +16,7 @@ export default function useGetLibrary() {
     const [library, setLibrary] = useState({});
 
     const handleGetLibrary = async (owner) => {
+        console.log(`tying to get library for ${owner}`);
         if (owner) {
             try {
                 // reset flags

@@ -7,6 +7,7 @@ import useGetLibrary from "../hooks/useGetLibrary";
 import useAddResourceToLibrary from "../hooks/useAddResourceToLibrary";
 import { useUserContext } from "../contexts/UserContext";
 import { useLibraryContext } from "../contexts/LibraryContext";
+import useRemoveResourceFromLibrary from "../hooks/useRemoveResourceFromLibrary";
 
 // display resources in a grid
 export default function ResourceBrowser(props) {
@@ -22,27 +23,51 @@ export default function ResourceBrowser(props) {
   const { library, handleUpdateLibrary } = useLibraryContext();
 
   // console.log(library);
-  const [errorLibrary, loadingLibrary, updatedLibrary, handleAddResourceToLibrary] = useAddResourceToLibrary();
+  const [errorAddToLibrary, loadingAddToLibrary, updatedAddToLibrary, handleAddResourceToLibrary] = useAddResourceToLibrary();
+  const [errorRemoveFromLibrary, loadingRemoveFromLibrary, updatedRemoveFromLibrary, handleRemoveResourceFromLibrary] = useRemoveResourceFromLibrary();
 
+
+  // used by resourcelocation online variant
   const callbackAddResourceToLibrary = (resource) => {
     // console.log(resource);
     handleAddResourceToLibrary(resource, library._id);
+  };
+
+  // user by resourcelocation local variant
+  const callbackRemoveResourceFromLibrary = (resourceId) => {
+    console.log(resourceId)
+    handleRemoveResourceFromLibrary(resourceId, library._id);
   }
 
   // observe errors
   useEffect(() => {
-    if(errorLibrary) {
-      alert(errorLibrary);
+    if(errorAddToLibrary) {
+      alert(errorAddToLibrary);
     }
-  }, [errorLibrary])
+  }, [errorAddToLibrary])
+
+  useEffect(() => {
+    if(errorRemoveFromLibrary) {
+      alert(errorRemoveFromLibrary);
+    }
+  }, [errorRemoveFromLibrary])
 
   // observe resource changes
   useEffect(() => {
-    if (updatedLibrary && updatedLibrary._id) {
-      console.log("updating libraryContext")
-      handleUpdateLibrary(updatedLibrary);
+    if (updatedAddToLibrary && updatedAddToLibrary._id) {
+      console.log("Resource added, updating libraryContext")
+      console.log(updatedAddToLibrary);
+      handleUpdateLibrary(updatedAddToLibrary);
     }
-  }, [updatedLibrary])
+  }, [updatedAddToLibrary])
+
+  useEffect(() => {
+    if (updatedRemoveFromLibrary && updatedRemoveFromLibrary._id) {
+      console.log("Resource removed, updating libraryContext")
+      console.log(updatedRemoveFromLibrary);
+      handleUpdateLibrary(updatedRemoveFromLibrary);
+    }
+  }, [updatedRemoveFromLibrary])
 
   return (
     <Container>
@@ -62,7 +87,9 @@ export default function ResourceBrowser(props) {
             <Grid item key={index}>
               {/* {console.log(resource)} */}
               <ResourceCard resource={resource} resourceType="article" resourceLocation={resourceLocation}
-                callbackAddResourceToLibrary={callbackAddResourceToLibrary} />
+                callbackAddResourceToLibrary={callbackAddResourceToLibrary}
+                callbackRemoveResourceFromLibrary={callbackRemoveResourceFromLibrary}
+                />
             </Grid>
           )
         })}

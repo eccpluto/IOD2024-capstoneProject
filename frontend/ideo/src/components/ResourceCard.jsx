@@ -17,7 +17,7 @@ export default function ResourceCard(props) {
     const { user } = useUserContext();
 
     // for determining context of card
-    const { resource, resourceType, resourceLocation, callbackAddResourceToLibrary } = props;
+    const { resource, resourceType, resourceLocation, callbackAddResourceToLibrary, callbackRemoveResourceFromLibrary } = props;
 
     // iframe viewable state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +41,10 @@ export default function ResourceCard(props) {
 
     const handleAddResourceToLibrary = () => {
         callbackAddResourceToLibrary(resource);
+    }
+
+    const handleRemoveResourceFromLibrary = () => {
+        callbackRemoveResourceFromLibrary(resource._id);
     }
 
     return (
@@ -77,13 +81,21 @@ export default function ResourceCard(props) {
                             href={resource.url} target="_blank">
                             <OpenInNewIcon />
                         </IconButton>
-                        <IconButton onClick={handleOpenLinkModal}>
-                            <FileOpenIcon />
-                        </IconButton>
+                        {(resource.pdf_link) && (
+                            <IconButton onClick={handleOpenLinkModal}>
+                                <FileOpenIcon />
+                            </IconButton>
+                        )}
                         {(user.name && (resourceLocation == "online")) && (
                             <IconButton
                                 onClick={handleAddResourceToLibrary}>
                                 <AddCircleIcon />
+                            </IconButton>
+                        )}
+                        {(user.name && (resourceLocation == "local")) && (
+                            <IconButton
+                                onClick={handleRemoveResourceFromLibrary}>
+                                <RemoveCircleIcon />
                             </IconButton>
                         )}
 
@@ -113,7 +125,7 @@ export default function ResourceCard(props) {
                     </AccordionDetails>
                 </Accordion>
             </Box>
-            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.url} name={resource.name} />
+            <IFrameModal isOpen={isModalOpen} handleClose={handleModalClose} url={resource.pdf_link} name={resource.name} />
         </Paper >
     )
 }
