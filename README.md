@@ -9,7 +9,7 @@ The app is a capstone project to encapsulate a variety of full stack technologie
 
 ### User Flow:
 
-You can start browsing millions of articles straight away, by opening the search sidebar by clicking the magnifying glass in the top right. Result cards can be opened in an embedded window in Ideo, or in a new tab - depending on which button you click on the result.
+You can start browsing millions of articles straight away, by opening the search sidebar by clicking the magnifying glass in the top right. Enter your search query and hit enter. Result cards can be opened in an embedded window in Ideo, or in a new tab - depending on which button you click on the result.
 
 You will notice the local search option is unavailable. This is because it would allow you to search a user library, which you can get access to when you have created an account and logged in.
 
