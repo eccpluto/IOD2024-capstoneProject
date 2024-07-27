@@ -1,11 +1,23 @@
 # Ideo
 
-![image](https://github.com/user-attachments/assets/d00c7a9c-d407-44f9-9e9a-19d17e71fbee)
 
 Ideo is a simple web app designed to enable creative minds to pull together a variety of research for their studies and applications.
 
 The app is a capstone project to encapsulate a variety of full stack technologies and design principles, including implementing MVC architecture, CRUD database interactions, RESTful server API, vendor API integration, Client-Server architechure, and the React framework.
 
+![image](https://github.com/user-attachments/assets/d00c7a9c-d407-44f9-9e9a-19d17e71fbee)
+
+### User Flow:
+
+You can start browsing millions of articles straight away, by opening the search sidebar by clicking the magnifying glass in the top right. Result cards can be opened in an embedded window in Ideo, or in a new tab - depending on which button you click on the result.
+
+You will notice the locak search option is unavailable. This is because it would allow you to search a user library, which you can get access to when you have created an account and logged in.
+
+To create an account, open the menu by clicking the top left hanburger icon, and selecting login. Select create an account, and upon successfull login, you will be able to access you library under the same hamburger menu.
+
+Your library will initially be empty - but you can fill this up by searching using the search bar (as before), and adding them using the (now available) plus button on each card. Duplicate adds will not case a problem, but these will be ignored.
+
+You can create multiple accounts, and each account will store a reference to the same resource if multiple accounts want this in their libraries.
 
 ## Installation Instructions
 
