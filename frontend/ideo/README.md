@@ -1,8 +1,9 @@
-# React + Vite
+# Ideo frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Setup
 
-Currently, two official plugins are available:
+- Clone this repo.
+- ```npm install``` in this directory.
+- ```npm run dev``` in this directoty will launch the frontend, and give you an enpoint address.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  Use this in conjunction with [Ideo backend ]https://github.com/eccpluto/IOD2024-capstoneProject/tree/master/backend/ideo)
