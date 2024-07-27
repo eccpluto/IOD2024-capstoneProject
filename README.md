@@ -1,5 +1,7 @@
 # Ideo
 
+![image](https://github.com/user-attachments/assets/d00c7a9c-d407-44f9-9e9a-19d17e71fbee)
+
 Ideo is a simple web app designed to enable creative minds to pull together a variety of research for their studies and applications.
 
 The app is a capstone project to encapsulate a variety of full stack technologies and design principles, including implementing MVC architecture, CRUD database interactions, RESTful server API, vendor API integration, Client-Server architechure, and the React framework.
@@ -27,6 +29,6 @@ frontend/ideo -> run npm install, and in backend/ideo -> run npm install.
 
 This will get your dependencies ready.
 
-We now need to run two shell commands in parallel, to boot the backend up, ```cd``` into the backend/ideo ```dir``` and run ```npm start```. Similarly,  run ```npm run dev``` in the frontend/ide ```dir```.
+We now need to run two shell commands in parallel, to boot the backend up, ```cd``` into the backend/ideo ```dir``` and run ```npm start```. Similarly,  run ```npm run dev``` in the frontend/ideo ```dir```.
 
 Head to the address in a web browser - commuinicated back to you by the ```npm run dev``` command, and the application will be ready to enjoy.
