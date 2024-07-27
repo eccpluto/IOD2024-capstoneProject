@@ -3,7 +3,7 @@
 
 Ideo is a simple web app designed to enable creative minds to pull together a variety of research for their studies and applications.
 
-The app is a capstone project to encapsulate a variety of full stack technologies and design principles, including implementing MVC architecture, CRUD database interactions, RESTful server API, vendor API integration, Client-Server architechure, and the React framework.
+The app is a capstone project to encapsulate a variety of full stack technologies and design principles, including implementing MVC architecture, CRUD database interactions, RESTful server API, vendor API integration, Client-Server architecture, and the React framework.
 
 ![image](https://github.com/user-attachments/assets/d00c7a9c-d407-44f9-9e9a-19d17e71fbee)
 
@@ -11,13 +11,15 @@ The app is a capstone project to encapsulate a variety of full stack technologie
 
 You can start browsing millions of articles straight away, by opening the search sidebar by clicking the magnifying glass in the top right. Result cards can be opened in an embedded window in Ideo, or in a new tab - depending on which button you click on the result.
 
-You will notice the locak search option is unavailable. This is because it would allow you to search a user library, which you can get access to when you have created an account and logged in.
+You will notice the local search option is unavailable. This is because it would allow you to search a user library, which you can get access to when you have created an account and logged in.
 
-To create an account, open the menu by clicking the top left hanburger icon, and selecting login. Select create an account, and upon successfull login, you will be able to access you library under the same hamburger menu.
+To create an account, open the menu by clicking the top left hamburger icon, and selecting login. Select create an account, and upon successful login, you will be able to access your library under the same hamburger menu.
 
-Your library will initially be empty - but you can fill this up by searching using the search bar (as before), and adding them using the (now available) plus button on each card. Duplicate adds will not case a problem, but these will be ignored.
+Your library will initially be empty - but you can fill this up by searching using the search bar (as before), and adding them using the (now available) plus button on each card. Duplicate adds will not cause a problem, but these will be ignored if you try to add these to your library.
 
-You can create multiple accounts, and each account will store a reference to the same resource if multiple accounts want this in their libraries.
+You can create multiple accounts, and each account will store a reference to the same resource if multiple accounts want this in their libraries, this reduces the size of the database and also has potential to enable multiple users to share their interests, and collaborate.
+
+Please note that the client code will cause the resource to be deleted entirely when removing it from the library. This has caused a known bug where if that user shared that resource in their library, it will also be deleted.
 
 ## Installation Instructions
 
@@ -25,13 +27,13 @@ You can create multiple accounts, and each account will store a reference to the
 
 Download a MongoDB service executable, one that you can run as a daemon on your preferred platform. When this is running, enter into the command line interface in your terminal, or if you prefer a GUI, try _MongoDB Compass_.
 
-You will will need to create a single database (ideo_db in the .env file in this repository), and 3 collections: users, resources, libraries.
+You will need to create a single database (ideo_db in the .env file in this repository), and 3 collections: users, resources, libraries.
 
-Ensure the mongoDB service is running and continue. You may need to troubleshoot your mongoDB instance if you have initial commection / permission issues (restarting your machine after installing usually helps).
+Ensure the mongoDB service is running and continue. You may need to troubleshoot your mongoDB instance if you have initial connection / permission issues (restarting your machine after installing usually helps).
 
-### Runnning the source code
+### Running the source code
 
-Everything you need is here on github, _including the .env file_ which typically we would not upload - and I may remove it.
+Everything you need is here on Github, _including the .env file_ which typically we would not upload - and I may remove it.
 
 Simply clone this entire repository, or choose a release package.
 
@@ -43,4 +45,4 @@ This will get your dependencies ready.
 
 We now need to run two shell commands in parallel, to boot the backend up, ```cd``` into the backend/ideo ```dir``` and run ```npm start```. Similarly,  run ```npm run dev``` in the frontend/ideo ```dir```.
 
-Head to the address in a web browser - commuinicated back to you by the ```npm run dev``` command, and the application will be ready to enjoy.
+Head to the address in a web browser - communicated back to you by the ```npm run dev``` command, and the application will be ready to enjoy.
